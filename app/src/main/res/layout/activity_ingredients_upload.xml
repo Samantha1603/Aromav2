@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IngredientsUploadActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/uploadImgRL1">
+
+                <include layout="@layout/snippet_top_upload_toolbar"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/uploadImgRL2"
+                android:layout_below="@+id/uploadImgRL1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <Button
+                    android:id="@+id/ingredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="200dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@null"
+                    android:layout_alignParentStart="true"
+                    android:hint="Enter Ingredients" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ingredients"
+                    android:id="@+id/ingredientLayout"
+                    android:weightSum="100">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="30"
+                        android:layout_height="wrap_content"
+                        android:text="Ingredients Selected:" />
+
+                    <TextView
+                        android:id="@+id/selectedIngredients"
+                        android:layout_width="0dp"
+                        android:layout_weight="60"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="42dp"
+                        android:maxLines = "5"
+                        android:scrollbars = "vertical"
+                        android:hint="The selected ingredients are..." />
+
+                </LinearLayout>
+
+
+
+                <Button
+                    android:id="@+id/ingredientsValue"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/ingredientLayout"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@null"
+                    android:layout_alignParentStart="true"
+                    android:hint="Enter Value" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ingredientsValue"
+                    android:id="@+id/ingredientLayout1"
+                    android:weightSum="100">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="30"
+                        android:layout_height="wrap_content"
+                        android:text="Details about the ingredients:" />
+
+                    <TextView
+                        android:id="@+id/IngredientListValue"
+                        android:layout_width="0dp"
+                        android:layout_weight="60"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="42dp"
+                        android:maxLines = "5"
+                        android:scrollbars = "vertical"
+                        android:hint="The selected ingredients are..." />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>
