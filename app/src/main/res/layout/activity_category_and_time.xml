@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoryAndTime">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/uploadImgRL1">
+
+                <include layout="@layout/snippet_top_upload_toolbar"/>
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="100">
+
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/uploadImgRL2"
+                android:layout_below="@+id/uploadImgRL1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <Button
+                    android:id="@+id/category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="200dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@null"
+                    android:layout_alignParentStart="true"
+                    android:hint="Enter Category" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/category"
+                        android:id="@+id/categoryLayout"
+                        android:weightSum="100">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="30"
+                            android:layout_height="wrap_content"
+                            android:text="Categories Selected:" />
+
+                        <TextView
+                            android:id="@+id/selectedCategories"
+                            android:layout_width="0dp"
+                            android:layout_weight="60"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="42dp"
+                            android:maxLines = "5"
+                            android:scrollbars = "vertical"
+                            android:hint="The selected categories are..." />
+
+                    </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/categoryLayout"
+                    android:id="@+id/timeLayout"
+                    android:weightSum="100">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="30"
+                        android:layout_height="wrap_content"
+                        android:text="Time Duration:" />
+
+                    <EditText
+                        android:id="@+id/timeDuration"
+                        android:layout_width="0dp"
+                        android:layout_weight="60"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="42dp"
+                        android:hint="Enter duration in hours" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/timeLayout"
+                    android:weightSum="100">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="30"
+                        android:layout_height="wrap_content"
+                        android:text="No. of servings:" />
+
+                    <EditText
+                        android:id="@+id/serves"
+                        android:layout_width="0dp"
+                        android:layout_weight="60"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="42dp"
+                        android:inputType="number"
+                        android:hint="Enter integer" />
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

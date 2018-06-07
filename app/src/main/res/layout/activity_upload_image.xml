@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UploadImageActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/uploadImgRL1">
+
+                <include layout="@layout/snippet_top_upload_toolbar"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/uploadImgRL2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/recipeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@null"
+                    android:hint="Enter Recipe Name" />
+
+                <ImageView
+                    android:id="@+id/imageUpload"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_margin="20dp"
+                    android:layout_below="@+id/recipeName"
+                    android:src="@drawable/logo"
+                    android:scaleType="centerCrop" />
+
+
+
+                <!--<Spinner-->
+                <!--android:id="@+id/category"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="20dp"-->
+                <!--android:background="@null"-->
+                <!--android:layout_below="@id/recipeName"-->
+                <!--android:hint="Enter Category" />-->
+
+
+                <!--<EditText-->
+                <!--android:id="@+id/ingredients"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/category"-->
+                <!--android:layout_margin="20dp"-->
+                <!--android:background="@null"-->
+                <!--android:hint="Enter comma seperated ingredients" />-->
+
+                <!--<EditText-->
+                <!--android:id="@+id/description"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/ingredients"-->
+                <!--android:layout_margin="20dp"-->
+                <!--android:background="@null"-->
+                <!--android:hint="Enter description" />-->
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>
