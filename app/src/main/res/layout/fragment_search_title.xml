@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/search_bar"
-        android:layout_alighParentTop="true"
+        android:layout_alignParentTop="true"
         app:mt_speechMode="false"
         app:mt_hint="Enter title to search"
         ></com.mancj.materialsearchbar.MaterialSearchBar>
