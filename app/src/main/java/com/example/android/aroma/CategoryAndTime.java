@@ -2,6 +2,7 @@ package com.example.android.aroma;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.android.aroma.Utils.CreateCategoryHashMap;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class CategoryAndTime extends AppCompatActivity {
 
@@ -49,7 +51,7 @@ public class CategoryAndTime extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
-                Intent intent=new Intent(CategoryAndTime.this, UploadImageActivity.class);
+                Intent intent=new Intent(CategoryAndTime.this,UploadImageActivity.class);
                 startActivity(intent);
             }
         });
@@ -59,8 +61,40 @@ public class CategoryAndTime extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(CategoryAndTime.this, IngredientsUploadActivity.class);
-                startActivity(intent);
+                if(selectedICategories.getText().toString().trim().length()<=0 || selectedICategories.getText()==null)
+                {
+                    Log.d(TAG,"next screen"+selectedICategories.getText());
+                    Toast.makeText(CategoryAndTime.this,"Select at least one category",Toast.LENGTH_LONG).show();
+                }
+                else if(timeDuration.getText().toString().trim().length()<=0 || timeDuration.getText()==null)
+                {
+                    Log.d(TAG,"next screen"+selectedICategories.getText());
+                    Toast.makeText(CategoryAndTime.this,"Select Time Duration",Toast.LENGTH_LONG).show();
+                }
+                else if(serves.getText().toString().trim().length()<=0 || serves.getText()==null)
+                {
+                    Log.d(TAG,"next screen"+selectedICategories.getText());
+                    Toast.makeText(CategoryAndTime.this,"Select serves",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent intent = new Intent(CategoryAndTime.this, IngredientsUploadActivity.class);
+                    Intent intentOld = getIntent();
+                    if (intentOld.hasExtra(getString(R.string.selected_image))) {
+                        String imgUrl;
+                        imgUrl = intentOld.getStringExtra(getString(R.string.selected_image));
+                        intent.putExtra("selected_image", imgUrl);
+
+                    } else if (intentOld.hasExtra(getString(R.string.selected_bitmap))) {
+                        Bitmap bitmap;
+                        bitmap = intentOld.getParcelableExtra(getString(R.string.selected_bitmap));
+                        intent.putExtra("selected_bitmap", bitmap);
+                    }
+                    intent.putExtra("Title", intentOld.getStringExtra("Title"));
+                    intent.putExtra("Category", selectedICategories.getText().toString());
+                    intent.putExtra("Time Duration", timeDuration.getText().toString());
+                    intent.putExtra("Servings", serves.getText().toString());
+                    startActivity(intent);
+                }
             }
         });
 

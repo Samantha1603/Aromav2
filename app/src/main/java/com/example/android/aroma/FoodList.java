@@ -68,6 +68,7 @@ public class FoodList extends AppCompatActivity {
                        // Toast.makeText(FoodList.this, ""+local.getName(), Toast.LENGTH_SHORT).show();
                         //Start new activity for recipe details
                         Intent recipeDetails = new Intent(FoodList.this,RecipeDetails.class);
+                        recipeDetails.putExtra("dataFrom","FoodList");
                         recipeDetails.putExtra("RecipeID",adapter.getRef(position).getKey());
                         startActivity(recipeDetails);
 

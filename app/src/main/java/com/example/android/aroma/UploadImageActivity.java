@@ -25,12 +25,11 @@ public class UploadImageActivity extends AppCompatActivity {
     private static final String TAG = "UploadImageActivity";
     //public String mAppend = "http://";
     public String mAppend = "file://";
-    private Intent intent;
     private String imgUrl;
     private Bitmap bitmap;
     private EditText editTitle;
-    private EditText editDescription;
-    private EditText editIngredients;
+    private String selectedImage="";
+    private String selectedImageValue="";
 
     private HashMap<Integer,String> categoryMap=new HashMap<>();
 
@@ -44,14 +43,11 @@ public class UploadImageActivity extends AppCompatActivity {
         setImage();
         ImageView backArrow=(ImageView) findViewById(R.id.backArrow);
         editTitle=(EditText) findViewById(R.id.recipeName);
-//        editCategories=(Spinner) findViewById(R.id.category);
-//        editDescription=(EditText) findViewById(R.id.description);
-//        editIngredients=(EditText) findViewById(R.id.ingredients);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
-                Intent intent=new Intent(UploadImageActivity.this, UploadActivity.class);
+                Intent intent=new Intent(UploadImageActivity.this,UploadActivity.class);
                 startActivity(intent);
             }
         });
@@ -69,35 +65,29 @@ public class UploadImageActivity extends AppCompatActivity {
                 else
                 {
                     Intent intent=new Intent(UploadImageActivity.this, CategoryAndTime.class);
+                    Intent intentOld=getIntent();
+                    if (intentOld.hasExtra(getString(R.string.selected_image))) {
+                        imgUrl = intentOld.getStringExtra(getString(R.string.selected_image));
+                        selectedImage="selected_image";
+                        intent.putExtra(selectedImage,imgUrl);
+
+                    } else if (intentOld.hasExtra(getString(R.string.selected_bitmap))) {
+                        bitmap = intentOld.getParcelableExtra(getString(R.string.selected_bitmap));
+                        selectedImage="selected_bitmap";
+                        intent.putExtra(selectedImage,bitmap);
+                    }
+                    intent.putExtra("Title",editTitle.getText().toString());
+
+
                     startActivity(intent);
                 }
                 //UPLOAD IMAGE TO FIREBASE
-                formatDataAsJSON();
+
             }
         });
 
     }
 
-
-    private String formatDataAsJSON()
-    {
-        final JSONObject root=new JSONObject();
-        try{
-            root.put("title","ABC");
-            root.put("servings","43");
-            root.put("ingredients","tomatoes,onions");
-            root.put("Categories","1");
-            root.put("Instructions","Do this then do that");
-            root.put("ReadyInMinutes","readyInMinutes");
-            Log.d(TAG,root.toString());
-
-        }
-        catch(Exception e)
-        {
-            Log.d(TAG,"Exception while creating JSON");
-        }
-        return null;
-    }
     private void setImage() {
         Intent intent = getIntent();
         ImageView imageView = (ImageView) findViewById(R.id.imageUpload);
@@ -110,6 +100,9 @@ public class UploadImageActivity extends AppCompatActivity {
             bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
             Log.d(TAG, "got new bitmap");
             imageView.setImageBitmap(bitmap);
+
+
+
         }
 
     }

@@ -1,16 +1,14 @@
 package com.example.android.aroma;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -44,9 +42,9 @@ public class IngredientsUploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients_upload);
         editingredients=(Button) findViewById(R.id.ingredients);
-        editingredientsValue=(Button) findViewById(R.id.ingredientsValue);
+        //editingredientsValue=(Button) findViewById(R.id.ingredientsValue);
         selectedIngredients=(TextView) findViewById(R.id.selectedIngredients);
-        selectedIngredientsValue=(TextView) findViewById(R.id.IngredientListValue);
+        //selectedIngredientsValue=(TextView) findViewById(R.id.IngredientListValue);
         ingredients=CreateCategoryHashMap.createCategoryList();
         checkedItems=new boolean[ingredients.length];
 
@@ -56,7 +54,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
-                Intent intent=new Intent(IngredientsUploadActivity.this, CategoryAndTime.class);
+                Intent intent=new Intent(IngredientsUploadActivity.this,CategoryAndTime.class);
                 startActivity(intent);
             }
         });
@@ -66,8 +64,31 @@ public class IngredientsUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent=new Intent(IngredientsUploadActivity.this, DescriptionUpload.class);
-                startActivity(intent);
+                if(selectedIngredients.getText().toString().trim().length()<=0 || selectedIngredients.getText()==null)
+                {
+                    Log.d(TAG,"next screen"+selectedIngredients.getText());
+                    Toast.makeText(IngredientsUploadActivity.this,"Select at least one ingredient",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent intent = new Intent(IngredientsUploadActivity.this, DescriptionUpload.class);
+                    Intent intentOld = getIntent();
+                    if (intentOld.hasExtra(getString(R.string.selected_image))) {
+                        String imgUrl;
+                        imgUrl = intentOld.getStringExtra(getString(R.string.selected_image));
+                        intent.putExtra("selected_image", imgUrl);
+
+                    } else if (intentOld.hasExtra(getString(R.string.selected_bitmap))) {
+                        Bitmap bitmap;
+                        bitmap = intentOld.getParcelableExtra(getString(R.string.selected_bitmap));
+                        intent.putExtra("selected_bitmap", bitmap);
+                    }
+                    intent.putExtra("Title", intentOld.getStringExtra("Title"));
+                    intent.putExtra("Category", intentOld.getStringExtra("Category"));
+                    intent.putExtra("Time Duration", intentOld.getStringExtra("Time Duration"));
+                    intent.putExtra("Servings", intentOld.getStringExtra("Servings"));
+                    intent.putExtra("Ingredients", selectedIngredients.getText().toString());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -102,6 +123,8 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item="";
+                        ArrayList<IngredientModel> ingredientList=new ArrayList<>();
+
                         for(int k=0;k<selectedItems.size();k++)
                         {
                             item=item+ ingredients[selectedItems.get(k)];
@@ -109,8 +132,24 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                             {
                                 item=item+",";
                             }
+                            IngredientModel ingredientItem = new IngredientModel();
+                            ingredientItem.setName(ingredients[selectedItems.get(k)]);
+                            ingredientItem.setMeasure("gms");
+                            ingredientItem.setQuantity("100");
+                            ingredientList.add(ingredientItem);
                         }
                         selectedIngredients.setText(item);
+
+
+                        LayoutInflater inflater = getLayoutInflater();
+                        View convertView = (View) inflater.inflate(R.layout.activity_ingredients_upload, null);
+
+                        //ListView lv = (ListView) convertView.findViewById(R.id.ingredient_listview);
+                        listView=(ListView) convertView.findViewById(R.id.ingredient_listview);
+
+                        IngredientsCustomAdapter adapter=new IngredientsCustomAdapter(IngredientsUploadActivity.this,ingredientList);
+                        listView.setAdapter(adapter);
+                        Log.d("LIST VIEW","List view added successfully");
                     }
                 });
                 mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
@@ -137,7 +176,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
             }
         });
 
-        editingredientsValue.setOnClickListener(new View.OnClickListener() {
+      /*  editingredientsValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<IngredientModel> ingredientList=new ArrayList<>();
@@ -163,9 +202,39 @@ public class IngredientsUploadActivity extends AppCompatActivity {
 
                 IngredientsCustomAdapter adapter=new IngredientsCustomAdapter(IngredientsUploadActivity.this,ingredientList);
                 listView.setAdapter(adapter);
+
+                mBuilder.setCancelable(false);
+                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String item="";
+                        for(int k=0;k<selectedItems.size();k++)
+                        {
+                            item=item+ ingredients[selectedItems.get(k)];
+                            if(k!=(selectedItems.size()-1))
+                            {
+                                item=item+",";
+                            }
+                        }
+                        selectedIngredientsValue.setText(item);
+                    }
+                });
+                mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+
+                AlertDialog mDialog = mBuilder.create();
+
+
+
+
                 mBuilder.show();
             }
-        });
+        });*/
     }
 
 

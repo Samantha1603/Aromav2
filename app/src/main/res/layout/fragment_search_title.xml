@@ -22,7 +22,9 @@
         android:layout_alignParentTop="true"
         app:mt_speechMode="false"
         app:mt_hint="Enter title to search"
-        ></com.mancj.materialsearchbar.MaterialSearchBar>
+        >
+
+    </com.mancj.materialsearchbar.MaterialSearchBar>
 
 
 </RelativeLayout>
