@@ -48,7 +48,8 @@
         <activity android:name=".UploadImageActivity" />
         <activity android:name=".CategoryAndTime" />
         <activity android:name=".IngredientsUploadActivity" />
-        <activity android:name=".DescriptionUpload" />
+        <activity android:name=".DescriptionUpload"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".FoodList" />
         <activity android:name=".RecipeDetails" />
         <activity android:name=".SearchByTitle" />

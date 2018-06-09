@@ -31,4 +31,13 @@ public class IngredientModel{
     public void setMeasure(String measure) {
         this.measure = measure;
     }
+
+    @Override
+    public String toString() {
+        return "IngredientModel{" +
+                "name='" + name + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", measure='" + measure + '\'' +
+                '}';
+    }
 }

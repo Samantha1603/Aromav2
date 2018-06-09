@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.aroma.Utils.CreateCategoryHashMap;
+import com.example.android.aroma.Utils.LinedEditText;
 
 import org.json.JSONObject;
 
@@ -22,14 +23,14 @@ public class DescriptionUpload extends AppCompatActivity {
 
     private static final String TAG = "Description";
 
-    private EditText description;
+    private LinedEditText description;
     ArrayList<Integer> selectedItems =new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description_upload);
-        description=(EditText) findViewById(R.id.description);
+        description=(LinedEditText) findViewById(R.id.description);
 
 
         ImageView backArrow=(ImageView) findViewById(R.id.backArrow);

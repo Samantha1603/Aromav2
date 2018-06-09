@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(MainActivity.this,CommentLayout.class);
+                        Intent intent=new Intent(MainActivity.this,IngredientsUploadActivity.class);
                         startActivity(intent);
                     }
                 }

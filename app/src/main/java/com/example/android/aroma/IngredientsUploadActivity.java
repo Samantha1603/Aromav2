@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
     private TextView selectedIngredients;
     private Button editingredientsValue;
     private TextView selectedIngredientsValue;
+    private EditText ingredientsSelectedTab;
     private ListView listView;
 
 
@@ -44,6 +46,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
         editingredients=(Button) findViewById(R.id.ingredients);
         //editingredientsValue=(Button) findViewById(R.id.ingredientsValue);
         selectedIngredients=(TextView) findViewById(R.id.selectedIngredients);
+      //  ingredientsSelectedTab=(EditText) findViewById(R.id.ingredientsSelectedTab);
         //selectedIngredientsValue=(TextView) findViewById(R.id.IngredientListValue);
         ingredients=CreateCategoryHashMap.createCategoryList();
         checkedItems=new boolean[ingredients.length];
@@ -86,7 +89,15 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                     intent.putExtra("Category", intentOld.getStringExtra("Category"));
                     intent.putExtra("Time Duration", intentOld.getStringExtra("Time Duration"));
                     intent.putExtra("Servings", intentOld.getStringExtra("Servings"));
-                    intent.putExtra("Ingredients", selectedIngredients.getText().toString());
+             //       intent.putExtra("Ingredients", ingredientsSelectedTab.getText().toString());
+
+                    for (int u=0;u<listView.getAdapter().getCount();u++)
+                    {
+                        Log.d(TAG, "onClick: "+listView.getAdapter().getItem(u).toString());
+
+                    }
+
+
                     startActivity(intent);
                 }
             }
@@ -134,21 +145,22 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                             }
                             IngredientModel ingredientItem = new IngredientModel();
                             ingredientItem.setName(ingredients[selectedItems.get(k)]);
-                            ingredientItem.setMeasure("gms");
-                            ingredientItem.setQuantity("100");
+                            ingredientItem.setMeasure("");
+                            ingredientItem.setQuantity("");
                             ingredientList.add(ingredientItem);
                         }
                         selectedIngredients.setText(item);
 
 
-                        LayoutInflater inflater = getLayoutInflater();
-                        View convertView = (View) inflater.inflate(R.layout.activity_ingredients_upload, null);
+//                        LayoutInflater inflater = getLayoutInflater();
+//                        View convertView = (View) inflater.inflate(R.layout.activity_ingredients_upload, null);
 
                         //ListView lv = (ListView) convertView.findViewById(R.id.ingredient_listview);
-                        listView=(ListView) convertView.findViewById(R.id.ingredient_listview);
+                        listView=(ListView) findViewById(R.id.ingredient_listview);
 
-                        IngredientsCustomAdapter adapter=new IngredientsCustomAdapter(IngredientsUploadActivity.this,ingredientList);
+                        IngredientsCustomAdapter adapter=new IngredientsCustomAdapter(IngredientsUploadActivity.this,R.layout.activity_ingredients_upload,ingredientList);
                         listView.setAdapter(adapter);
+                        listView.setScrollContainer(false);
                         Log.d("LIST VIEW","List view added successfully");
                     }
                 });
