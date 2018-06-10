@@ -66,7 +66,7 @@ public class RecipeDetails extends AppCompatActivity {
     ArrayList<String> ingList = new ArrayList<>();
     ArrayList<String> stpList = new ArrayList<>();
     String title;
-    String recipeID="1";
+    String recipeID="";
     StepsAdapter stepsAdapter;
     IngredientAdapter ingredientAdapter;
     //FirebaseDatabase database;
@@ -204,7 +204,7 @@ public class RecipeDetails extends AppCompatActivity {
 
     private void jsonParse(String recipeId) {
         String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes/";
-        String url = base_url+"1";
+        String url = base_url+recipeId;
 
         Log.d(TAG, "jsonParse: "+url);
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,

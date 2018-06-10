@@ -4,11 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.widget.SimpleAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Model.IngredientModel;
+import com.example.android.aroma.Utils.FilePaths;
 import com.example.android.aroma.ViewHolder.IngredientAdapter;
 import com.example.android.aroma.ViewHolder.StepsAdapter;
 import com.example.android.aroma.Model.Comment;
@@ -45,13 +49,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class RecipeUpload extends AppCompatActivity {
 
@@ -70,6 +80,7 @@ public class RecipeUpload extends AppCompatActivity {
     String recipeID="";
     StepsAdapter stepsAdapter;
     IngredientAdapter ingredientAdapter;
+    private String token="";
 
 
     @Override
@@ -83,6 +94,7 @@ public class RecipeUpload extends AppCompatActivity {
         list_ingredients.setAdapter(ingredientAdapter);
         listView_steps.setAdapter(stepsAdapter);
         upload = (Button)findViewById(R.id.uploadConfirm);
+
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,8 +105,20 @@ public class RecipeUpload extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        generateJSON();
+                        //generateJSON();
+                        Intent intent=getIntent();
+                        if (intent.hasExtra(getString(R.string.selected_image))) {
+                            String imgUrl;
+                            imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+                            String mAppend = "file://"+imgUrl;
+                            Picasso.with(getBaseContext()).load(mAppend).into(food_image);
 
+                        } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                            Bitmap bitmap;
+                            bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+
+                        }
+                        sendJSONParse(recipeID);
                         dialog.dismiss();
                            // stop chronometer here
 
@@ -120,6 +144,7 @@ public class RecipeUpload extends AppCompatActivity {
         food_time=(TextView)findViewById(R.id.food_time);
         food_image=(ImageView)findViewById(R.id.image_recipe);
         mQueue = Volley.newRequestQueue(this);
+        createUSer();
 
         collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance((R.style.ExpandedAppBar));
@@ -138,6 +163,34 @@ public class RecipeUpload extends AppCompatActivity {
    //     test();
     }
 
+    private String saveImage(Bitmap bmp)
+    {
+        Log.d(TAG, "saveImage: in save image");
+        FileOutputStream out = null;
+        try {
+            FilePaths filePaths=new FilePaths();
+            Date d=new Date();
+            SimpleDateFormat sdf=new SimpleDateFormat("ddMMyyyyHHmmss");
+            String dateAppend=sdf.format(d);
+            out = new FileOutputStream(filePaths.Pictures+"/Recipe_"+dateAppend);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+            Log.d(TAG, "saveImage: Image saved at="+filePaths.Pictures+"/Recipe_"+dateAppend);
+            String fileLoc=filePaths.Pictures+"/Recipe_"+dateAppend;
+            return fileLoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
 
     private void test() {
@@ -167,16 +220,18 @@ public class RecipeUpload extends AppCompatActivity {
             } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                 Bitmap bitmap;
                 bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+
+                String fileLoc=saveImage(bitmap);
+
+                Picasso.with(getBaseContext()).load(fileLoc).into(food_image);
+
                 //   Picasso.with(getBaseContext()).load(bitmap).into(food_image);
             }
 
             collapsingToolbarLayout.setTitle(intent.getStringExtra("Title"));
             food_servings.setText(intent.getStringExtra("Servings"));
-            // food_time.setText(food.getTime());
+            food_time.setText(intent.getStringExtra("Time Duration"));
             food_name.setText(intent.getStringExtra("Title"));
-//            recipe_description.setText(intent.getStringExtra("Ingredients"));
-//            recipe_steps.setText(intent.getStringExtra("Instructions"));
-//            food_time.setText(intent.getStringExtra("Time Duration"));
 
             String ingName, ingQuantity, ingUnit, step,step_number;
             JSONArray ingredientArray=new JSONArray(intent.getStringExtra("Ingredients"));
@@ -187,8 +242,8 @@ public class RecipeUpload extends AppCompatActivity {
 
                 ingName=ings.getString("name");
                 ingList.add(ingName);
-                ingQuantity=ings.getString("quantity");
-                ingUnit=ings.getString("measure");
+                ingQuantity=ings.getString("amount");
+                ingUnit=ings.getString("unit");
                 Ingredients ingredientsList= new Ingredients(ingName,ingQuantity,ingUnit);
                 ingredientAdapter.add(ingredientsList);
 
@@ -202,7 +257,7 @@ public class RecipeUpload extends AppCompatActivity {
                 step_number =stepObj.getString("step_number");
                 Steps stepsList= new Steps(step,step_number);
                 stpList.add(step);
-                stepsAdapter.add(stepObj);
+                stepsAdapter.add(stepsList);
             }
         }
         catch(Exception e)
@@ -212,77 +267,7 @@ public class RecipeUpload extends AppCompatActivity {
     }
 
 
-    private void jsonParse(String recipeId) {
-        String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes/";
-        String url = base_url+recipeId;
-
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response)
-                    {
-
-                        try {
-                            JSONObject jobj = response.getJSONObject("data");
-                            JSONObject recipes = jobj.getJSONObject("recipe");
-
-                            //JSONObject recipes = jsonArray.getJSONObject(i);
-                            //String id = categories.getString("id");
-                            String name = recipes.getString("title");
-                            title = name;
-                            food_name.setText(name);
-                            String time = recipes.getString("duration");
-                            food_time.setText(time);
-                            String serves = recipes.getString("servings");
-                            food_servings.setText(serves);
-
-                            // String image = categories.getString("webformatURL");
-                            String image= recipes.getString("image_url");
-                            Picasso.with(getBaseContext()).load(image)
-                                    .into(food_image);
-                            String ingName, ingQuantity, ingUnit, step,step_number;
-                            //String image = categories.getString("https://en.wikipedia.org/wiki/Food");
-                            JSONObject recipeObj = jobj.getJSONObject("recipe");
-                            JSONArray ingredientArray =  recipeObj.getJSONArray("ingredients");
-                            for (int j =0;j<ingredientArray.length();j++) {
-                                JSONObject ings = ingredientArray.getJSONObject(j);
-
-                                ingName=ings.getString("name");
-                                ingList.add(ingName);
-                                ingQuantity=ings.getString("_pivot_amount");
-                                ingUnit=ings.getString("_pivot_unit");
-                                Ingredients ingredientsList= new Ingredients(ingName,ingQuantity,ingUnit);
-                                ingredientAdapter.add(ingredientsList);
-
-                            }
-                            JSONArray stepsArray =  recipeObj.getJSONArray("instructions");
-                            for (int j =0;j<stepsArray.length();j++) {
-                                JSONObject steps = stepsArray.getJSONObject(j);
-                                step=steps.getString("instruction");
-                                step_number =steps.getString("step_num");
-                                //ArrayList<String>
-                                Steps stepsList= new Steps(step,step_number);
-                                stpList.add(step);
-                                stepsAdapter.add(stepsList);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                error.printStackTrace();
-            }
-        });
-
-        mQueue.add(request);
-    }
-    private void generateJSON() {
+    private JSONObject generateJSON() {
         Intent i = getIntent();
         JSONObject j = new JSONObject();
         try {
@@ -295,14 +280,166 @@ public class RecipeUpload extends AppCompatActivity {
             j.put("sourceName", "");
             j.put("description", "");
             j.put("readyInMinutes",  i.getStringExtra("Time Duration"));
-            j.put("servings", i.getStringExtra("Servings"));
-            j.put("categories", i.getStringExtra("Category"));
-            j.put("ingredients",i.getStringExtra("Ingredients"));
-            j.put("instructions",i.getStringExtra("Description"));
-            j.put("imagebase64", "data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4...");
+            j.put("servings", Integer.parseInt(i.getStringExtra("Servings")));
+            JSONArray categorieArray=new JSONArray(i.getStringExtra("Category"));
+            j.put("categories", categorieArray);
+            JSONArray ingredientArray=new JSONArray(i.getStringExtra("Ingredients"));
+            j.put("ingredients",ingredientArray);
+            JSONArray stepsArray=new JSONArray(i.getStringExtra("Description"));
+
+            j.put("instructions",stepsArray);
+
+            if (i.hasExtra(getString(R.string.selected_image))) {
+                String imgUrl;
+                imgUrl = i.getStringExtra(getString(R.string.selected_image));
+                String filePath="file://storage/emulated/0/Pictures/Instagram/IMG_20180525_221446_162.jpg";
+
+                j.put("imagebase64",  "");
+
+
+            } else if (i.hasExtra(getString(R.string.selected_bitmap))) {
+                Bitmap bitmap;
+                bitmap = i.getParcelableExtra(getString(R.string.selected_bitmap));
+                j.put("imagebase64", "data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4...");
+            }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return j;
+    }
+    private  void createUSer() {
+        String url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/users/token";
+        //  String url = base_url+"1"+"/comments";
+        Log.d(TAG, "create users "+url);
+
+        JSONObject o=new JSONObject();
+        JSONObject x=new JSONObject();
+
+        try {
+            o.put("email","imsam.rod@gmail.com");
+            o.put("password","123456");
+            x.put("user",o);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+
+            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, x,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "onResponse:  users token  in json request of comments"+response);
+                            try {
+                                JSONObject jobj = response.getJSONObject("data");
+                                token=jobj.getString("token");
+                                Log.d(TAG, "onResponse: Token="+token);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "getuser: comment response error");
+                    error.printStackTrace();
+                }
+
+
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("Content-Type", "application/json");
+                    String creds = String.format("%s:%s","imsam.rod@gmail.com","123456");
+                    String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
+                    params.put("Authorization", auth);
+                    return params;
+
+                }
+            };
+
+            mQueue.add(request);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private  void sendJSONParse(final String recipeId) {
+        String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes";
+        String url = base_url;
+        Log.d(TAG, "sendJSONParse:recipe upload "+url);
+        Log.d(TAG, "sendJSONParse: TOKEN="+token);
+
+        JSONObject x=new JSONObject();
+
+
+        try {
+            JSONObject o=generateJSON();
+            x.put("recipe",o);
+
+            Log.d(TAG, "sendJSONParse: "+x);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        final ArrayList<Comment> cList = new ArrayList<>();
+
+        try {
+
+            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, x,
+                    new Response.Listener<JSONObject>() {
+
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "onResponse: recipe uploaded posted"+response);
+
+                        }
+
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "on send jsonparse: comment response error");
+                    error.printStackTrace();
+                }
+
+
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    // Basic Authentication
+                    //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+                    Log.d(TAG, "getHeaders: authentication");
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+
+                }
+            };
+
+            mQueue.add(request);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 }
@@ -311,7 +448,7 @@ public class RecipeUpload extends AppCompatActivity {
 
 /*
 JSON format
-
+{"recipe":{ingredients":[{"id":"1001","measure":"grams","name":"butter","quantity":"200"}],"instructions":[{"step":" add butter","step_number":"1"}],"imagebase64":"file:\/\/\/storage\/emulated\/0\/Pictures\/Instagram\/IMG_20180525_221446_162.jpg"}}
 "recipe": {
         "title": "Buttermilk-Marinated Chicken",
         "vegetarian": false,

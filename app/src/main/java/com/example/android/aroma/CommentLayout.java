@@ -61,6 +61,7 @@ public class CommentLayout extends AppCompatActivity {
 
     private String filePath="MyFileStorage";
     private String fileName="comments.json";
+    private String token="";
     private String recipeId="";
     File myFile;
 
@@ -94,17 +95,14 @@ public class CommentLayout extends AppCompatActivity {
         Intent n=getIntent();
         createUSer();
       //  recipeId=n.getStringExtra("recipeId");
-        mComments=getJSONParse(recipeId);
-      //  sendJSONParse(recipeId);
-        if(mComments==null)
-            mComments=new ArrayList<>();
-        CommentListAdapter adapter=new CommentListAdapter(CommentLayout.this,R.layout.layout_comment,mComments);
-        mListView.setAdapter(adapter);
+        displayComments();
 
         mCheckMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeToJsonFile();
+///                writeToJsonFile();
+                sendJSONParse(recipeId);
+                displayComments();
                 Log.d(TAG, "onClick: comments saved");
                 Intent intent=new Intent(CommentLayout.this,CommentLayout.class);
                 startActivity(intent);
@@ -120,6 +118,15 @@ public class CommentLayout extends AppCompatActivity {
         });
 
 
+
+    }
+
+    private void displayComments() {
+        mComments=getJSONParse(recipeId);
+        if(mComments==null)
+            mComments=new ArrayList<>();
+        CommentListAdapter adapter=new CommentListAdapter(CommentLayout.this,R.layout.layout_comment,mComments);
+        mListView.setAdapter(adapter);
 
     }
 
@@ -246,7 +253,7 @@ public class CommentLayout extends AppCompatActivity {
 
     private  ArrayList<Comment> getJSONParse(final String recipeId) {
         String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes/";
-        String url = base_url+"1"+"/comments";
+        String url = base_url+recipeId+"/comments";
       //  Log.d(TAG, "getJSONParse:comments "+url);
         final ArrayList<Comment> cList = new ArrayList<>();
 
@@ -256,7 +263,7 @@ public class CommentLayout extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response)
                     {
-                         Log.d(TAG, "onResponse:               in json request of comments");
+                         Log.d(TAG, "onResponse:               in json request of comments"+response);
                         try {
                             JSONObject jobj = response.getJSONObject("data");
                            // Log.d(TAG, "onResponse: "+jobj.getS);
@@ -306,14 +313,14 @@ public class CommentLayout extends AppCompatActivity {
 
     private  void sendJSONParse(final String recipeId) {
         String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes/";
-        String url = base_url+"1"+"/comments";
+        String url = base_url+recipeId+"/comments";
         Log.d(TAG, "sendJSONParse:comments "+url);
 
         JSONObject o=new JSONObject();
         JSONObject x=new JSONObject();
 
         try {
-            o.put("comment","this is a comment");
+            o.put("comment",mComment.getText().toString());
             x.put("comment",o);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -325,45 +332,13 @@ public class CommentLayout extends AppCompatActivity {
 
         try {
 
-
             final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, x,
                     new Response.Listener<JSONObject>() {
 
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d(TAG, "onResponse:  sendjsonparse  in json request of comments");
-                            try {
-                                JSONObject jobj = response.getJSONObject("data");
-                                // Log.d(TAG, "onResponse: "+jobj.getS);
-                                JSONArray jsonArray = jobj.getJSONArray("comments");
-                                Log.d(TAG, "onResponse: " + jsonArray);
-                                //{"id":1,"comment":"great recipe!","time_added":"2018-06-08T02:57:46.000Z"}]
-                                for (int i = 0; i < jsonArray.length(); i++) {
-
-
-                                    JSONObject jsonComments = jsonArray.getJSONObject(i);
-
-                                    // JSONObject singleObj = jsonComments.get;
-                                    Comment c = new Comment();
-                                    //   c.setUser_id(jsonComments.getString("user_id"));
-                                    //   c.setDate_created(jsonComments.getString("DateCreated"));
-                                    c.setComment(jsonComments.getString("comment"));
-                                    String dateAdded = jsonComments.getString("time_added");
-                                    SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
-                                    Date d = new Date();
-                                    try {
-                                        d = format2.parse(dateAdded);
-
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    c.setDate_created(d.toString());
-                                    cList.add(c);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            Log.d(TAG, "onResponse:  comments posted");
 
                         }
 
@@ -378,12 +353,12 @@ public class CommentLayout extends AppCompatActivity {
             }){
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    params.put("Content-Type", "application/json");
-                    String creds = String.format("%s:%s","imsam.rod@gmail.com","123456");
-                    String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
-                    params.put("Authorization", auth);
-                    return params;
+                    Map<String, String> headers = new HashMap<>();
+                    // Basic Authentication
+                    //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+                    Log.d(TAG, "getHeaders: authentication");
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
 
                 }
             };
@@ -401,7 +376,7 @@ public class CommentLayout extends AppCompatActivity {
     private  void createUSer() {
         String url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/users/token";
       //  String url = base_url+"1"+"/comments";
-        //Log.d(TAG, "sendJSONParse:comments "+url);
+        Log.d(TAG, "create users "+url);
 
         JSONObject o=new JSONObject();
         JSONObject x=new JSONObject();
@@ -424,7 +399,14 @@ public class CommentLayout extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, "onResponse:  users token  in json request of comments"+response);
+                            try {
+                                JSONObject jobj = response.getJSONObject("data");
+                                token=jobj.getString("token");
+                                Log.d(TAG, "onResponse: Token="+token);
 
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                         }
 
