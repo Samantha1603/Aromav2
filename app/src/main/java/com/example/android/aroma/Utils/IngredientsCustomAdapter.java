@@ -1,6 +1,8 @@
 package com.example.android.aroma.Utils;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,12 @@ import java.util.ArrayList;
 
 public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
 
+    private static final String TAG = "IngredientsCustomAdapte";
+    private LayoutInflater mInflater;
+    private int layoutResource;
+    private Context mContext;
     private ViewHolder viewHolder;
+
         private static class ViewHolder {
             private TextView name;
             private EditText value;
@@ -24,9 +31,13 @@ public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
 
         }
 
-        public IngredientsCustomAdapter(Context context, ArrayList<IngredientModel> items) {
-            super(context, 0, items);
+        public IngredientsCustomAdapter(Context context,  @LayoutRes int resource,ArrayList<IngredientModel> items) {
+            super(context, resource, items);
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mContext = context;
+            layoutResource = resource;
         }
+
 
         public View getView(int position, View convertView, ViewGroup parent) {
 

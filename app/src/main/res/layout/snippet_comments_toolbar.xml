@@ -4,7 +4,6 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/uploadImgRL1"
         android:background="@drawable/white_grey_border_bottom"
         >
 
@@ -15,9 +14,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -26,15 +23,23 @@
                     android:layout_centerVertical="true"
                     android:id="@+id/backArrow"
                     android:src="@drawable/back_arrow"/>
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="upload"
-                    android:layout_alignParentRight="true"
+                    android:text="Comments"
+                    android:layout_toRightOf="@+id/backArrow"
                     android:layout_marginRight="15dp"
                     android:textSize="20sp"
-                    android:textColor="@color/colorAccent"
-                    android:id="@+id/upload"/>
+                    android:textColor="@color/black"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/tvNext"
+                    />
+
+
+
+
             </RelativeLayout>
 
 

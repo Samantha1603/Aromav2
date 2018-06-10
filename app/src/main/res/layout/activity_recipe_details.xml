@@ -110,7 +110,6 @@
                             android:paddingLeft="12dp"/>
                         <TextView
                             android:id="@+id/food_time"
-                            android:text="35 mins"
                             android:textColor="@color/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="normal"
@@ -125,7 +124,6 @@
 
                         <TextView
                             android:id="@+id/food_servings"
-                            android:text="36"
                             android:textColor="@color/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="normal"
@@ -205,6 +203,13 @@
 </android.support.v7.widget.CardView>
 
 
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:id="@+id/addcomments"
+            android:text="Add comments"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

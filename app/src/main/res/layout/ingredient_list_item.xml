@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="50"
+        android:layout_weight="40"
         android:text="Ingredient"
         android:gravity="center"
         android:id="@+id/ingredientName"
@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="30"
+        android:layout_weight="40"
         android:text="Measure"
         android:hint="Kgs or gms"
         android:id="@+id/ingredientMeasure"

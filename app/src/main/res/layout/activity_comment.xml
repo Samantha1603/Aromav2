@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relLayout1">
+
+        <include layout="@layout/snippet_comments_toolbar"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/relLayout2"
+        android:layout_below="@+id/relLayout1"
+        android:layout_marginBottom="60dp">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listViewC"></ListView>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/relLayout3"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/white_grey_border_top">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:background="@null"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:hint="Add a comment..."
+            android:textSize="14sp"
+            android:id="@+id/comment"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_checkmark"
+            android:id="@+id/ivPostComment"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:background="@color/white">-->
+
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/relLayout1"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:background="@drawable/grey_border_bottom">-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:weightSum="100">-->
+
+
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="20"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="mitch.tabian"-->
+                <!--android:id="@+id/comment_username"-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="18sp"-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="60"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="this is a comment"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="18sp"-->
+                <!--android:layout_toRightOf="@+id/comment_username"-->
+                <!--android:id="@+id/comment"/>-->
+
+
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="20"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="3 d"-->
+                <!--android:textColor="@color/grey"-->
+                <!--android:textSize="14sp"-->
+                <!--android:id="@+id/comment_time_posted"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:layout_below="@+id/comment"/>-->
+
+
+        <!--</LinearLayout>-->
+    <!--</RelativeLayout>-->
+
+<!--</RelativeLayout>-->
