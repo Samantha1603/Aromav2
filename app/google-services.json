@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "798051195699",
+    "firebase_url": "https://aroma2-c2ca0.firebaseio.com",
+    "project_id": "aroma2-c2ca0",
+    "storage_bucket": "aroma2-c2ca0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:798051195699:android:f803ffbb74b155c2",
+        "android_client_info": {
+          "package_name": "com.example.android.aroma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "798051195699-i51h9v7e1si8pdg2h14n0fpi48bcquh3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "798051195699-i51h9v7e1si8pdg2h14n0fpi48bcquh3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBI_misHnTClCzHPb_au4hOAPAg2wB6qw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

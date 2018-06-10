@@ -1,0 +1,50 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_alignParentBottom="true">-->
+
+       <!--<LinearLayout-->
+           <!--android:layout_width="match_parent"-->
+           <!--android:layout_height="wrap_content"-->
+           <!--android:orientation="horizontal">-->
+           <!--<Button-->
+               <!--android:layout_width="0dp"-->
+               <!--android:layout_height="match_parent"-->
+               <!--android:layout_weight="1"-->
+               <!--android:text="GALLERY"-->
+               <!--android:background="@color/transparent"-->
+               <!--android:id="@+id/gallerView"/>-->
+           <!--<Button-->
+               <!--android:layout_width="0dp"-->
+               <!--android:layout_height="match_parent"-->
+               <!--android:layout_weight="1"-->
+               <!--android:text="PHOTO"-->
+               <!--android:background="@color/transparent"-->
+               <!--android:id="@+id/photoView"/>-->
+
+       <!--</LinearLayout>-->
+    <!--</RelativeLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tabsBottom">
+            </android.support.design.widget.TabLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+    </RelativeLayout>
+
+</merge>
