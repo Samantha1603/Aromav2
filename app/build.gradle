@@ -37,9 +37,9 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
 
     //imageLoader
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.1'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.0'
     implementation 'com.github.mancj:MaterialSearchBar:0.7.6'
-
+    implementation 'com.google.code.gson:gson:2.2.4'
 
 }
 apply plugin: 'com.google.gms.google-services'

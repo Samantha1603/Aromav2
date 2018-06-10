@@ -9,9 +9,9 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="40"
+        android:layout_weight="20"
         android:text="Ingredient"
-        android:gravity="center"
+        android:gravity="left|center"
         android:id="@+id/ingredientName"
         />
     <EditText
@@ -28,6 +28,15 @@
         android:layout_weight="40"
         android:hint="Kgs or gms"
         android:id="@+id/ingredientMeasure"
+        />
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:text="X"
+        android:textColor="@android:color/holo_red_dark"
+        android:background="@null"
+        android:id="@+id/cancel"
         />
 
 </LinearLayout>

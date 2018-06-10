@@ -2,6 +2,8 @@ package com.example.android.aroma.Model;
 
 public class IngredientModel{
 
+    private  String id;
+
     private String name;
 
     private String quantity;
@@ -30,6 +32,14 @@ public class IngredientModel{
 
     public void setMeasure(String measure) {
         this.measure = measure;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

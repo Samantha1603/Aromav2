@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.android.aroma.Model.Comment;
+
 public class MainActivity extends AppCompatActivity {
 
     Button signUp;

@@ -26,41 +26,64 @@
             android:layout_below="@+id/uploadImgRL1">
 
 
-            <Button
-                android:id="@+id/ingredients"
-                android:layout_width="match_parent"
+            <AutoCompleteTextView
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="20dp"
+                android:hint="Enter your ingredient"
                 android:layout_marginTop="200dp"
-                android:background="@null"
-                android:hint="Enter Ingredients" />
+                android:id="@+id/editIngredient"/>
 
-            <LinearLayout
-                android:id="@+id/ingredientLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ingredients"
-                android:weightSum="100">
+            <Button
+                android:id="@+id/add_ingredients"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Add"
+                android:layout_alignParentTop="true"
+                android:layout_margin="20dp"
+                android:layout_marginTop="200dp"
+                android:src="@drawable/ic_add_black_24dp"
+                android:layout_toRightOf="@+id/editIngredient"
+                />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="30"
-                    android:text="Ingredients Selected:" />
+            <!--<Button-->
+                <!--android:id="@+id/ingredients"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_margin="20dp"-->
+                <!--android:layout_marginTop="200dp"-->
+                <!--android:background="@null"-->
+                <!--android:hint="Enter Ingredients" />-->
 
-                <TextView
-                    android:id="@+id/selectedIngredients"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="42dp"
-                    android:layout_weight="60"
-                    android:hint="The selected ingredients are..."
-                    android:maxLines="5"
-                    android:scrollbars="vertical" />
+            <!--<LinearLayout-->
+                <!--android:id="@+id/ingredientLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/ingredients"-->
+                <!--android:weightSum="100">-->
 
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="30"-->
+                    <!--android:text="Ingredients Selected:" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/selectedIngredients"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginEnd="42dp"-->
+                    <!--android:layout_weight="60"-->
+                    <!--android:hint="The selected ingredients are..."-->
+                    <!--android:maxLines="5"-->
+                    <!--android:scrollbars="vertical" />-->
+
+            <!--</LinearLayout>-->
 
             <!--<ScrollView-->
                 <!--android:layout_width="match_parent"-->
@@ -70,7 +93,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/ingredientLayout"
+                    android:layout_below="@+id/editIngredient"
                     android:layout_margin="20dp">
 
                     <ListView

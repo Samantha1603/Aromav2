@@ -24,13 +24,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/uploadImgRL1">
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:id="@+id/stepButtons">
+                <Button
+                    android:id="@+id/addStep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Step" />
+                <Button
+                    android:id="@+id/removeStep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/addStep"
+                    android:text="Remove Step" />
+                </LinearLayout>
                 <com.example.android.aroma.Utils.LinedEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="20dp"
-                    android:layout_marginTop="200dp"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/stepButtons"
                     android:inputType="text|textMultiLine"
                     android:hint="Your description goes here"
                     android:background="@null"

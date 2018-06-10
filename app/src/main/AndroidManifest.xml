@@ -48,14 +48,17 @@
         <activity android:name=".UploadImageActivity" />
         <activity android:name=".CategoryAndTime" />
         <activity android:name=".IngredientsUploadActivity" />
-        <activity android:name=".DescriptionUpload"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".DescriptionUpload"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".RecipeDetails" />
         <activity android:name=".SearchByTitle" />
-        <activity android:name=".CommentLayout"></activity>
-        <activity android:name=".SearchByIngredients"></activity>
-        <activity android:name=".SearchPopular"></activity>
-        <activity android:name=".FoodList"></activity>
+        <activity android:name=".CommentLayout" />
+        <activity android:name=".SearchByIngredients" />
+        <activity android:name=".SearchPopular" />
+        <activity android:name=".FoodList" />
+        <activity android:name=".recipe_upload" />
+        <activity android:name=".RecipeUpload"></activity>
     </application>
 
 </manifest>

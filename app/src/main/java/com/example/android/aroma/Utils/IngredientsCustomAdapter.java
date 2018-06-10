@@ -1,5 +1,6 @@
 package com.example.android.aroma.Utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -10,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.android.aroma.MainActivity;
 import com.example.android.aroma.Model.IngredientModel;
 import com.example.android.aroma.R;
 
@@ -20,7 +23,7 @@ import java.util.ArrayList;
 
 public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
 
-    private static final String TAG = "IngredientsCustomAdapte";
+    private static final String TAG = "IngredientsCustomAdapter";
     private LayoutInflater mInflater;
     private int layoutResource;
     private Context mContext;
@@ -30,6 +33,7 @@ public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
             private TextView name;
             private EditText value;
             private EditText measure;
+            private Button cancel;
 
         }
 
@@ -51,7 +55,13 @@ public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
                 viewHolder.name = (TextView) convertView.findViewById(R.id.ingredientName);
                 viewHolder.value = (EditText) convertView.findViewById(R.id.ingredientValue);
                 viewHolder.measure = (EditText) convertView.findViewById(R.id.ingredientMeasure);
-
+                viewHolder.cancel = (Button) convertView.findViewById(R.id.cancel);
+                viewHolder.cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("YYYYYYYYYYYYYYYYYYY", "onClick: "+view.getTag());
+                    }
+                });
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -68,6 +78,7 @@ public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
                 viewHolder.value.setEnabled(false);
                 viewHolder.measure.setText(item.getMeasure());
                 viewHolder.measure.setEnabled(false);
+
             }
 
             return convertView;
