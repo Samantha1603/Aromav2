@@ -1,31 +1,31 @@
 {
   "project_info": {
-    "project_number": "798051195699",
-    "firebase_url": "https://aroma2-c2ca0.firebaseio.com",
-    "project_id": "aroma2-c2ca0",
-    "storage_bucket": "aroma2-c2ca0.appspot.com"
+    "project_number": "267117835555",
+    "firebase_url": "https://aroma-82dec.firebaseio.com",
+    "project_id": "aroma-82dec",
+    "storage_bucket": "aroma-82dec.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:798051195699:android:f803ffbb74b155c2",
+        "mobilesdk_app_id": "1:267117835555:android:f803ffbb74b155c2",
         "android_client_info": {
           "package_name": "com.example.android.aroma"
         }
       },
       "oauth_client": [
         {
-          "client_id": "798051195699-i51h9v7e1si8pdg2h14n0fpi48bcquh3.apps.googleusercontent.com",
+          "client_id": "267117835555-djrlnp2hqmk3hkn7rcbstc9c0ecf2345.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "798051195699-i51h9v7e1si8pdg2h14n0fpi48bcquh3.apps.googleusercontent.com",
+          "client_id": "267117835555-djrlnp2hqmk3hkn7rcbstc9c0ecf2345.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDBI_misHnTClCzHPb_au4hOAPAg2wB6qw"
+          "current_key": "AIzaSyCHukbCK-jH8bLSOViRQtLfTqHRnczyJi4"
         }
       ],
       "services": {

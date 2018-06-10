@@ -137,25 +137,10 @@ public class fragment_gallery extends Fragment {
         gridView.setAdapter(adapter);
 
         if(imgURLs.size()!=0) {
-//            setImage(imgURLs.get(0), galleryView, mAppend);
-//            mSelectedImage=imgURLs.get(0);
-//            imgURLs.clear();
-//            imgURLs.add("res.cloudinary.com/aroma-app/image/upload/v1528270525/sqikzmfwalozpsk8q5c9.jpg");
-//            imgURLs.add("spoonacular.com/recipeImages/669528-556x370.jpg");
-//            imgURLs.add("spoonacular.com/recipeImages/618144-556x370.jpg");
             setImage(imgURLs.get(0), galleryView, mAppend);
             mSelectedImage=imgURLs.get(0);
         }
-//        else
-//        {
-//            imgURLs.add("res.cloudinary.com/aroma-app/image/upload/v1528270525/sqikzmfwalozpsk8q5c9.jpg");
-//            imgURLs.add("spoonacular.com/recipeImages/669528-556x370.jpg");
-//            imgURLs.add("spoonacular.com/recipeImages/618144-556x370.jpg");
-//            setImage(imgURLs.get(0), galleryView, mAppend);
-//            mSelectedImage=imgURLs.get(0);
-//
-//
-//        }
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -12,15 +12,14 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_search">SearchRecipe</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="upload">Upload</string>
+    <string name="gallery">Gallery</string>
     <string name="Next">Next</string>
     <string name="selected_image">selected_image</string>
-    <string name="upload">Upload</string>
     <string name="selected_bitmap">selected_bitmap</string>
-    <string name="opencamera">Open Camera</string>
-    <string name="gallery">Gallery</string>
-    <string name="upload_image">Upload Image</string>
-    <string name="enter_recipe_name">Enter Recipe Name</string>
-    <string name="enter_category">Enter Category</string>
-    <string name="enter_ingredients">Enter comma seperated ingredients</string>
-    <string name="enter_description">Enter description</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

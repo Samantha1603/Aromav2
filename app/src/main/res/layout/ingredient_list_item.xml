@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:weightSum="100">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="40"
+        android:text="Ingredient"
+        android:gravity="center"
+        android:id="@+id/ingredientName"
+        />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="20"
+        android:hint="Quantity"
+        android:inputType="number"
+        android:id="@+id/ingredientValue"
+        />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="40"
+        android:hint="Kgs or gms"
+        android:id="@+id/ingredientMeasure"
+        />
+
+</LinearLayout>

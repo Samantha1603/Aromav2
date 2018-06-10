@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.android.aroma.SearchActivity">
+
+    <item
+        android:id="@+id/action_serchTitle"
+        android:orderInCategory="100"
+        android:title="By Title"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_searchIngredients"
+        android:orderInCategory="200"
+        android:title="By Ingredients"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/action_searchPopular"
+        android:orderInCategory="300"
+        android:title="Popular"
+        app:showAsAction="never"></item>
+</menu>

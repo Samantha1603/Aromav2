@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.example.android.aroma.R;
+import com.example.android.aroma.BaseActivity;
+import com.example.android.aroma.UploadActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.example.android.aroma.R;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
