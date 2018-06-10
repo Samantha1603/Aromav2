@@ -3,6 +3,8 @@ package com.example.android.aroma.Utils;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +65,9 @@ public class IngredientsCustomAdapter extends ArrayAdapter<IngredientModel> {
                 Log.d("item name",item.getName());
                 viewHolder.name.setText(item.getName().toString());
                 viewHolder.value.setText(item.getQuantity());
+                viewHolder.value.setEnabled(false);
                 viewHolder.measure.setText(item.getMeasure());
+                viewHolder.measure.setEnabled(false);
             }
 
             return convertView;

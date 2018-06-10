@@ -18,14 +18,14 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="20"
-        android:text="Quantity"
+        android:hint="Quantity"
+        android:inputType="number"
         android:id="@+id/ingredientValue"
         />
     <EditText
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="40"
-        android:text="Measure"
         android:hint="Kgs or gms"
         android:id="@+id/ingredientMeasure"
         />
