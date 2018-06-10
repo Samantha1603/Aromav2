@@ -9,9 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Interface.ItemClickListener;
+import com.example.android.aroma.ViewHolder.FoodListAdapter;
 import com.example.android.aroma.ViewHolder.FoodViewHolder;
 import com.example.android.aroma.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -23,17 +31,28 @@ import com.google.firebase.database.ValueEventListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchByTitle extends AppCompatActivity {
+public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.OnItemClickListener{
 
+    public static final String Search_ID = "id";
+    private ArrayList<Food> foodList;
+    FoodListAdapter foodListAdapter;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
-    DatabaseReference foodList;
+    //DatabaseReference foodList;
     String categoryID = "";
+    private RequestQueue mQueue;
+    TextView textFullName;
+   // RecyclerView recyclerMenu;
+
     FirebaseRecyclerAdapter<Food,FoodViewHolder> adapter;
 
     //Search Functionality
@@ -46,11 +65,8 @@ public class SearchByTitle extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_search_title);
-
-
-        //Firebase
-        database=FirebaseDatabase.getInstance();
-        foodList=database.getReference("Recipes");
+        mQueue = Volley.newRequestQueue(this);
+        foodList = new ArrayList<>();
         recyclerView=(RecyclerView)findViewById(R.id.recycler_food_search);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -61,14 +77,14 @@ public class SearchByTitle extends AppCompatActivity {
         if(getIntent()!=null)
         {
 
-            loadListFood();
+            //loadListFood();
         }
 
         //search thing
         materialSearchBar = (MaterialSearchBar)findViewById(R.id.search_bar);
         materialSearchBar.setHint("Enter title to search here");
         materialSearchBar.setSpeechMode(false);
-        loadSuggest();
+        //loadSuggest();
         materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
         materialSearchBar.addTextChangeListener(new TextWatcher() {
@@ -108,7 +124,7 @@ public class SearchByTitle extends AppCompatActivity {
             public void onSearchConfirmed(CharSequence text) {
 
                 //when search finishes
-                startSearch(text);
+                jsonParse(text);
             }
 
             @Override
@@ -118,7 +134,7 @@ public class SearchByTitle extends AppCompatActivity {
         });
     }
 
-    private void startSearch(CharSequence text) {
+   /* private void startSearch(CharSequence text) {
         searchAdapter=new FirebaseRecyclerAdapter<Food, FoodViewHolder>(
             Food.class,
             R.layout.food_item,
@@ -138,7 +154,7 @@ public class SearchByTitle extends AppCompatActivity {
                         // Toast.makeText(FoodList.this, ""+local.getName(), Toast.LENGTH_SHORT).show();
                         //Start new activity for recipe details
                         Intent recipeDetails = new Intent(SearchByTitle.this,RecipeDetails.class);
-                        recipeDetails.putExtra("RecipeID",adapter.getRef(position).getKey());
+                        recipeDetails.putExtra("RecipeID",searchAdapter.getRef(position).getKey());
                         startActivity(recipeDetails);
 
                     }
@@ -147,10 +163,58 @@ public class SearchByTitle extends AppCompatActivity {
     };
         recyclerView.setAdapter(searchAdapter);
 
+    }*/
+
+    private void jsonParse(CharSequence categoryId) {
+        String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes?search=category&keyword=";
+        String url = base_url+categoryId;
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+
+                        try {
+                            JSONObject jobj = response.getJSONObject("data");
+                            JSONArray jsonArray = jobj.getJSONArray("recipes");
+                            for (int i =0; i<jsonArray.length();i++)
+                            {
+                                JSONObject recipes = jsonArray.getJSONObject(i);
+                                String id = recipes.getString("id");
+                                String name = recipes.getString("title");
+                                System.out.println("number = " +i +name);
+                                // String image = categories.getString("webformatURL");
+                                String image= recipes.getString("image_url");
+                                System.out.println("number = " +i +image);
+                                //String image = categories.getString("https://en.wikipedia.org/wiki/Food");
+                                foodList.add(new Food(name,image,id));
+
+                            }
+                            foodListAdapter = new FoodListAdapter(SearchByTitle.this, foodList);
+                            recyclerView.setAdapter(foodListAdapter);
+                            foodListAdapter.setOnItemClickListener(SearchByTitle.this);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                error.printStackTrace();
+            }
+        });
+
+        mQueue.add(request);
     }
 
+    /*
     private void loadSuggest() {
-        foodList.orderByChild("MenuID").equalTo(categoryID)
+        foodList.orderByChild("MenuID")
         .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -193,35 +257,17 @@ public class SearchByTitle extends AppCompatActivity {
 
         //set adapter
         recyclerView.setAdapter(adapter);
+    }*/
+
+    public void onItemClick(int position) {
+        Intent detailIntent = new Intent(this, RecipeDetails.class);
+        Food clickedItem = foodList.get(position);
+
+        detailIntent.putExtra(Search_ID, clickedItem.getId());
+        //detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getCreator());
+        //detailIntent.putExtra(EXTRA_LIKES, clickedItem.getLikeCount());
+
+        startActivity(detailIntent);
     }
 
-    /*
-    private void loadMenu() {
-       // adap=new FirebaseRecyclerAdapter<>()
-        adapter =  new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,foodList) {
-            @Override
-            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
-                viewHolder.textMenuName.setText(model.getName());
-                Picasso.with(getBaseContext()).load(model.getImage())
-                        .into(viewHolder.imageView);
-                final Category clickItem = model;
-                viewHolder.setItemClickListener(new ItemClickListener(){
-                    public void onClick(View view, int position, boolean isLongClick){
-                        //Toast.makeText(Home.this,""+clickItem.getName(), Toast.LENGTH_SHORT).show();
-                        //Get category ID and send to new activity
-                        Intent foodList = new Intent(SearchByTitle.this,FoodList.class);
-                        //CategoryID is key, so get key of the menu
-
-                        System.out.println("key is" + adapter.getRef(position).getKey());
-
-                        foodList.putExtra("CategoryID",adapter.getRef(position).getKey());
-                        startActivity(foodList);
-
-                    }
-                });
-
-            }
-        };
-        recyclerMenu.setAdapter(adapter);
-    }*/
 }

@@ -3,14 +3,24 @@ package com.example.android.aroma;
 public class Category {
     private String Name;
     private String Image;
+    private String Id;
 
     public Category(){
 
     }
 
-    public Category(String name, String image) {
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
+
+    public Category(String name, String image, String id) {
         Name = name;
         Image = image;
+        Id=id;
     }
 
     public String getName() {
@@ -28,6 +38,8 @@ public class Category {
     public void setImage(String image) {
         Image = image;
     }
+
+
 }
 
 

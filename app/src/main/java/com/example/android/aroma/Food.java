@@ -2,19 +2,26 @@ package com.example.android.aroma;
 
 public class Food  {
 
-    private String Name,Image,MenuID, Servings, Time,Description,Directions;
+    private String Name,Image,MenuID, Servings, Time,Ingregients,Directions,Id;
 
     public Food() {
     }
 
-    public Food(String name, String image, String menuID, String servings, String time, String description, String directions) {
+    public Food(String name, String image, String menuID, String servings, String time, String ingregients, String directions,String id) {
         Name = name;
         Image = image;
         MenuID = menuID;
         Servings = servings;
         Time = time;
-        Description = description;
+        Ingregients = ingregients;
         Directions = directions;
+        Id = id;
+    }
+
+    public Food(String name, String image,String id) {
+        Name = name;
+        Image = image;
+        Id = id;
     }
 
     public String getName() {
@@ -57,12 +64,12 @@ public class Food  {
         Time = time;
     }
 
-    public String getDescription() {
-        return Description;
+    public String getIngredients() {
+        return Ingregients;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public void setIngredients(String ingredients) {
+        Ingregients = ingredients;
     }
 
     public String getDirections() {
@@ -71,5 +78,9 @@ public class Food  {
 
     public void setDirections(String directions) {
         Directions = directions;
+    }
+
+    public String getId() {
+        return Id;
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.aroma">
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -27,6 +28,11 @@
             android:name=".Home"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme"></activity>
+        <activity android:name=".SearchByTitle"></activity>
+        <activity android:name=".SearchByIngredients"></activity>
+        <activity android:name=".SearchPopular"></activity>
+        <activity android:name=".RecipeDetails"></activity>
+        <activity android:name=".FoodList"></activity>
     </application>
 
 </manifest>

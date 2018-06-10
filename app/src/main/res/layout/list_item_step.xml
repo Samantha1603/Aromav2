@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <!-- Album id / Hidden by default -->
+
+    <TextView
+        android:id="@+id/step_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:layout_weight="4"
+
+        android:text="TextView" />
+    <TextView
+        android:id="@+id/step_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:layout_weight="1"
+
+        android:text="TextView" />
+
+
+
+
+</LinearLayout>
