@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="82dp"
+                android:layout_marginTop="84dp"
                 android:fontFamily="cursive"
                 android:text="Sign Up"
                 android:textAlignment="center"
@@ -37,31 +37,13 @@
             android:layout_marginRight="10dp"
             android:orientation="vertical">
 
-
             <LinearLayout
-                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/et_but"
-                    android:fontFamily="sans-serif-condensed"
-                    android:hint="@string/username"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <EditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="20sp"
@@ -75,13 +57,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/username"
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="20sp"
@@ -141,5 +123,16 @@
                 android:text="OR" />
 
         </RelativeLayout>
+
     </ScrollView>
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/progressbar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
 </RelativeLayout>
