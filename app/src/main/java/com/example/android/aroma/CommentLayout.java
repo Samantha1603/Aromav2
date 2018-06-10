@@ -104,9 +104,9 @@ public class CommentLayout extends AppCompatActivity {
         {
             Log.d(TAG, "writeFile: FILE ALREADY CREATED");
             exits=true;
-           // file.delete();
-           // Log.d(TAG, "writeToJsonFile: FILE DELETED!!!!");
-            //file=new File(path, "commentList.json");
+            file.delete();
+            Log.d(TAG, "writeToJsonFile: FILE DELETED!!!!");
+            file=new File(path, "commentList.json");
 
 
         }
@@ -114,11 +114,17 @@ public class CommentLayout extends AppCompatActivity {
             FileOutputStream stream = new FileOutputStream(file,exits);
             try {
                 Log.d(TAG, "writeToJsonFile: In hereeeeeeeee");
-                HashMap<String,String> singleComment=new HashMap<>();
-                singleComment.put("username", "\""+"Sam"+"\"");
-                singleComment.put("Comment", "\""+mComment.getText().toString()+"\"");
+                //HashMap<String,String> singleComment=new HashMap<>();
+                Comment commentOne=new Comment();
+                commentOne.setUser_id("Sam");
+                commentOne.setComment(mComment.getText().toString());
                 Date d = new Date();
-                singleComment.put("DateCreated", "\""+d.toString()+"\"");
+//                commentOne.setDate_created(d.toString());
+//
+//                singleComment.put("username", "\""+"Sam"+"\"");
+//                singleComment.put("Comment", "\""+mComment.getText().toString()+"\"");
+//                Date d = new Date();
+//                singleComment.put("DateCreated", "\""+d.toString()+"\"");
                 JSONObject jsonObject = new JSONObject();
 //                    JSONArray jsonArray = new JSONArray();
 //                    JSONObject x = new JSONObject();
@@ -127,8 +133,8 @@ public class CommentLayout extends AppCompatActivity {
 //                    Date d = new Date();
 //                    x.put("DateCreated", d.toString());
 //                    jsonArray.put(x);
-                    jsonObject.put("comments",singleComment);
-                    stream.write(jsonObject.toString().getBytes());
+                //    jsonObject.put("comments",commentOne);
+                    stream.write(commentOne.toString().getBytes());
 
                 } catch (Exception e) {
                 Log.d(TAG, "writeToJsonFile: Exception in write 1");
@@ -167,10 +173,11 @@ public class CommentLayout extends AppCompatActivity {
         if (!contents.equals("")) {
             ArrayList<Comment> cList = new ArrayList<>();
             try {
-                JSONObject obj = new JSONObject(contents);
-                for (int i = 0; i < obj.length(); i++) {
 
-                    String x = obj.getString("comments");
+                    JSONObject obj = new JSONObject(contents);
+                    for (int i = 0; i < obj.length(); i++) {
+
+                    String x = obj.getString("Comment");
                     x = x.replace("\\", "");
                     JSONObject jsonComments = new JSONObject(x);
 

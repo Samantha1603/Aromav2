@@ -1,5 +1,6 @@
 package com.example.android.aroma;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import com.example.android.aroma.Utils.CreateCategoryHashMap;
 import com.example.android.aroma.Utils.IngredientsCustomAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class IngredientsUploadActivity extends AppCompatActivity {
 
@@ -37,7 +39,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
 
     boolean[] checkedItems;
     String[] ingredients;
-    ArrayList<Integer> selectedItems =new ArrayList<>();
+    HashMap<Integer,String> selectedItems =new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(selectedIngredients.getText().toString().trim().length()<=0 || selectedIngredients.getText()==null)
+                if(listView.getAdapter().getCount()==0)
                 {
                     Log.d(TAG,"next screen"+selectedIngredients.getText());
                     Toast.makeText(IngredientsUploadActivity.this,"Select at least one ingredient",Toast.LENGTH_LONG).show();
@@ -93,6 +95,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
 
                     for (int u=0;u<listView.getAdapter().getCount();u++)
                     {
+
                         Log.d(TAG, "onClick: "+listView.getAdapter().getItem(u).toString());
 
                     }
@@ -102,22 +105,70 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                 }
             }
         });
+        final ArrayList<IngredientModel> ingredientList=new ArrayList<>();
 
         editingredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder mBuilder=new AlertDialog.Builder(IngredientsUploadActivity.this);
-                mBuilder.setTitle("Categories:");
+                final AlertDialog.Builder mBuilder=new AlertDialog.Builder(IngredientsUploadActivity.this);
+                mBuilder.setTitle("Ingredients:");
+
 
                 mBuilder.setMultiChoiceItems(ingredients, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean isChecked) {
                         if (isChecked) {
 
-                                if (!selectedItems.contains(i)) {
-                                    selectedItems.add(i);
-                                } else {
+                                if (!selectedItems.containsKey(i)) {
+                                    selectedItems.put(i,ingredients[i]);
+                                   } else {
                                     selectedItems.remove(i);
+                                }
+                                try {
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(IngredientsUploadActivity.this);
+                                    // Get the layout inflater
+                                    LayoutInflater inflater = IngredientsUploadActivity.this.getLayoutInflater();
+                                    final View dialogView = inflater.inflate(R.layout.ingredient_list_item, null);
+                                    // Inflate and set the layout for the dialog
+                                    // Pass null as the parent view because its going in the dialog layout
+                                    TextView title = (TextView) dialogView.findViewById(R.id.ingredientName);
+                                    title.setText(selectedItems.get(i));
+
+                                    final int selectedI = i;
+                                    builder.setView(dialogView)
+                                            // Add action buttons
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    // sign in the user ...
+                                                    EditText val = (EditText) dialogView.findViewById(R.id.ingredientValue);
+                                                    EditText measure = (EditText) dialogView.findViewById(R.id.ingredientMeasure);
+                                                    //   TextView title=(TextView) dialogView.findViewById(R.id.ingredientName);
+
+                                                    IngredientModel ingredientItem = new IngredientModel();
+                                                    ingredientItem.setName(selectedItems.get(selectedI));
+                                                    ingredientItem.setQuantity(val.getText().toString());
+                                                    ingredientItem.setMeasure(measure.getText().toString());
+                                                    ingredientList.add(ingredientItem);
+                                                }
+                                            })
+                                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    //LoginDialogFragment.this.getDialog().cancel();
+                                                    selectedItems.remove(selectedI);
+                                                    checkedItems[selectedI] = false;
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                                catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                    System.out.print("MESSAGE:"+e.getMessage());
+                                    System.out.print("CAUSE"+e.getCause());
+
                                 }
 
                         }
@@ -133,24 +184,6 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                 mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String item="";
-                        ArrayList<IngredientModel> ingredientList=new ArrayList<>();
-
-                        for(int k=0;k<selectedItems.size();k++)
-                        {
-                            item=item+ ingredients[selectedItems.get(k)];
-                            if(k!=(selectedItems.size()-1))
-                            {
-                                item=item+",";
-                            }
-                            IngredientModel ingredientItem = new IngredientModel();
-                            ingredientItem.setName(ingredients[selectedItems.get(k)]);
-                            ingredientItem.setMeasure("");
-                            ingredientItem.setQuantity("");
-                            ingredientList.add(ingredientItem);
-                        }
-                        selectedIngredients.setText(item);
-
 
 //                        LayoutInflater inflater = getLayoutInflater();
 //                        View convertView = (View) inflater.inflate(R.layout.activity_ingredients_upload, null);
