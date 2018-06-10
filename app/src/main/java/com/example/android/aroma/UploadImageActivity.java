@@ -47,7 +47,7 @@ public class UploadImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
-                Intent intent=new Intent(UploadImageActivity.this,UploadActivity.class);
+                Intent intent=new Intent(UploadImageActivity.this,UploadImageActivity.class);
                 startActivity(intent);
             }
         });
