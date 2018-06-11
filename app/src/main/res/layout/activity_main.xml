@@ -90,7 +90,7 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/email"
+                            android:id="@+id/signin_email"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:background="@drawable/et_but"
@@ -109,7 +109,7 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/password"
+                            android:id="@+id/signin_password"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginTop="20sp"

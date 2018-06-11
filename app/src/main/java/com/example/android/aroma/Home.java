@@ -42,7 +42,9 @@ import mehdi.sakout.fancybuttons.FancyButton;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MenuAdapter.OnItemClickListener {
     public static final String EXTRA_NAME = "name";
-
+    Intent intent;
+    String userid;
+    String username,password,email;
     private ArrayList<Category> menuList;
     MenuAdapter menuAdapter;
    FirebaseDatabase database;
@@ -58,6 +60,12 @@ public class Home extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        intent = getIntent();
+        username=intent.getStringExtra("username");
+        email=intent.getStringExtra("email");
+        password=intent.getStringExtra("password");
+        userid=intent.getStringExtra("id");
+
         setContentView(R.layout.activity_home);
         mQueue = Volley.newRequestQueue(this);
         iQueue = Volley.newRequestQueue(this);
@@ -119,17 +127,6 @@ public class Home extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         category= database.getReference("Categories");
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Home.this,UploadActivity.class);
-                startActivity(intent);
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -141,7 +138,7 @@ public class Home extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
         textFullName=(TextView)findViewById(R.id.textFullName);
-        //textFullName.setText("default");
+        //textFullName.setText(username);
 
         //load menu
         recyclerMenu = (RecyclerView)findViewById(R.id.recylcer_menu);
@@ -284,16 +281,17 @@ public class Home extends AppCompatActivity
         if (id == R.id.nav_home) {
 
         } else if (id == R.id.nav_account) {
+            Intent intent = new Intent(Home.this,UserAccount.class);
+            intent.putExtra("username",username);
+            intent.putExtra("email",email);
+            intent.putExtra("password",password);
+            intent.putExtra("id",userid);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_liked) {
-
-        } else if (id == R.id.nav_subscription) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -58,6 +58,7 @@
         <activity android:name=".SearchPopular" />
         <activity android:name=".FoodList" />
         <activity android:name=".recipe_upload" />
+        <activity android:name=".UserAccount"></activity>
         <activity android:name=".RecipeUpload"></activity>
     </application>
 

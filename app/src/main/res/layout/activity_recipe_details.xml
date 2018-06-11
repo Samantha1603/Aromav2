@@ -50,7 +50,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnLike"
-        android:src="@drawable/ic_thumb_up_black_24dp"
+        android:src="@drawable/ic_menu_share"
         app:backgroundTint="@android:color/white"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
