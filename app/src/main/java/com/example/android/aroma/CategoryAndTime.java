@@ -15,9 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.aroma.Utils.CreateCategoryHashMap;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class CategoryAndTime extends AppCompatActivity {
 
@@ -26,13 +28,16 @@ public class CategoryAndTime extends AppCompatActivity {
 
     private Button editCategories;
     private TextView selectedICategories;
+    private ArrayList<Integer> selectedCategoryIds=new ArrayList<>();
     private EditText timeDuration;
 
     private EditText serves;
 
     boolean[] checkedItems;
     String[] categoryList;
+    HashMap<String,Integer> categoryHashMAp=new HashMap<>();
     ArrayList<Integer> selectedItems =new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +46,14 @@ public class CategoryAndTime extends AppCompatActivity {
         editCategories=(Button) findViewById(R.id.category);
         selectedICategories=(TextView) findViewById(R.id.selectedCategories);
         categoryList=CreateCategoryHashMap.createCategoryList();
+        categoryHashMAp=CreateCategoryHashMap.createCategoryHashMapList();
+
         checkedItems=new boolean[categoryList.length];
 
         timeDuration=(EditText) findViewById(R.id.timeDuration);
         serves=(EditText) findViewById(R.id.serves);
         ImageView backArrow=(ImageView) findViewById(R.id.backArrow);
-
+        final Intent intentOld = getIntent();
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +85,7 @@ public class CategoryAndTime extends AppCompatActivity {
                 }
                 else {
                     Intent intent = new Intent(CategoryAndTime.this, IngredientsUploadActivity.class);
-                    Intent intentOld = getIntent();
+
                     if (intentOld.hasExtra(getString(R.string.selected_image))) {
                         String imgUrl;
                         imgUrl = intentOld.getStringExtra(getString(R.string.selected_image));
@@ -90,7 +97,17 @@ public class CategoryAndTime extends AppCompatActivity {
                         intent.putExtra("selected_bitmap", bitmap);
                     }
                     intent.putExtra("Title", intentOld.getStringExtra("Title"));
-                    intent.putExtra("Category", selectedICategories.getText().toString());
+                    String x[]=selectedICategories.getText().toString().split(",");
+                    for(int i=0;i<x.length;i++)
+                    {
+                        selectedCategoryIds.add(categoryHashMAp.get(x[i]));
+                    }
+
+                    Gson gson = new Gson();
+
+                    String jsonCategory = gson.toJson(selectedCategoryIds);
+                    Log.d(TAG, "onClick: Category +"+jsonCategory);
+                    intent.putExtra("Category", jsonCategory);
                     intent.putExtra("Time Duration", timeDuration.getText().toString());
                     intent.putExtra("Servings", serves.getText().toString());
                     startActivity(intent);

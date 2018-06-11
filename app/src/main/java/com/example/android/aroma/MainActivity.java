@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.android.aroma.Model.Comment;
+
 public class MainActivity extends AppCompatActivity {
 
     Button signUp;
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
             relay1.setVisibility(View.VISIBLE);
             mainLayout.setBackgroundResource(R.drawable.login_page_blur);
-          //  relay2.setVisibility(View.VISIBLE);
+            //  relay2.setVisibility(View.VISIBLE);
             relay3.setVisibility(View.INVISIBLE);
         }
     };

@@ -122,6 +122,7 @@ public class RecipeDetails extends AppCompatActivity {
         }
         Intent intent=getIntent();
         String dataFrom=intent.getStringExtra("dataFrom");
+        displayRecipe(intent);
 //        if(dataFrom.equals("Upload"))
 //        {
 //            displayRecipe(intent);
@@ -137,6 +138,7 @@ public class RecipeDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(RecipeDetails.this, CommentLayout.class);
+                intent.putExtra("recipeId",recipeID);
                 startActivity(intent);
             }
         });
@@ -153,12 +155,12 @@ jsonParse(recipeID);
 
         String img="https://imagesvc.timeincapp.com/v3/mm/image?url=http%3A%2F%2Fcdn-image.myrecipes.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2F4_3_horizontal_-_1200x900%2Fpublic%2Fcheese-truffles-sl-1000.jpg%3Fitok%3DZZw-7iua&w=800&q=85";
         Picasso.with(getBaseContext()).load(img).into(food_image);
-        collapsingToolbarLayout.setTitle("abc");
-        food_servings.setText("10");
-        food_time.setText("2 hrs");
-        food_name.setText("abc");
-        recipe_description.setText("this is recipe for abc");
-        recipe_steps.setText("first do this then do that");
+//        collapsingToolbarLayout.setTitle("abc");
+//        food_servings.setText("10");
+//        food_time.setText("2 hrs");
+//        food_name.setText("abc");
+//        recipe_description.setText("this is recipe for abc");
+//        recipe_steps.setText("first do this then do that");
     }
 
 
@@ -187,8 +189,6 @@ jsonParse(recipeID);
             recipe_steps.setText(intent.getStringExtra("Instructions"));
             food_time.setText(intent.getStringExtra("Time Duration"));
 
-
-
         }
         catch(Exception e)
         {
@@ -206,6 +206,7 @@ jsonParse(recipeID);
         String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/recipes/";
         String url = base_url+recipeId;
 
+        Log.d(TAG, "jsonParse: "+url);
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>()
                 {

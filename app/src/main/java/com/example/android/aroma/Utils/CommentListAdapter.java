@@ -70,9 +70,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         //set the timestamp difference
         String timestampDifference = getTimestampDifference(getItem(position));
         if(!timestampDifference.equals("0")){
-            holder.timestamp.setText(timestampDifference + " d");
+            holder.timestamp.setText(timestampDifference + "d");
         }else{
-            holder.timestamp.setText("today");
+            holder.timestamp.setText("Today");
         }
 
         return convertView;
@@ -84,10 +84,10 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
      */
     private String getTimestampDifference(Comment comment){
         Log.d(TAG, "getTimestampDifference: getting timestamp difference.");
-
+        Log.d(TAG, "getTimestampDifference:to string comment "+comment.toString());
         String difference = "";
         Calendar c= Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.CANADA);
         sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));//google 'android list of timezones'
         Date today = c.getTime();
         sdf.format(today);

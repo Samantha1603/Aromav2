@@ -85,17 +85,17 @@
 
 
                     <LinearLayout
-                        android:id="@+id/username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <EditText
+                            android:id="@+id/email"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:background="@drawable/et_but"
                             android:fontFamily="sans-serif-condensed"
-                            android:hint="@string/username"
+                            android:hint="@string/email"
                             android:paddingLeft="15dp"
                             android:paddingRight="15dp"
                             android:textColor="@color/colorPrimary"
@@ -103,13 +103,13 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/username"
+                        android:layout_below="@+id/email"
                         android:orientation="vertical">
 
                         <EditText
+                            android:id="@+id/password"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginTop="20sp"
@@ -134,11 +134,12 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/et_but"
 
-                    android:fontFamily="casual"
+
                     android:paddingLeft="70dp"
                     android:paddingRight="70dp"
                     android:text="Login"
-                    android:textColor="@color/transparent"
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="sans-serif-condensed"
                     android:textSize="16sp" />
 
                 <RelativeLayout
@@ -183,6 +184,14 @@
         </ScrollView>
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/progressbar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
 
 </RelativeLayout>

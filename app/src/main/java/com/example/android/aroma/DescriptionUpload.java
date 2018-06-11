@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,16 +16,20 @@ import android.widget.Toast;
 
 import com.example.android.aroma.Utils.CreateCategoryHashMap;
 import com.example.android.aroma.Utils.LinedEditText;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DescriptionUpload extends AppCompatActivity {
+public class DescriptionUpload extends AppCompatActivity{
 
     private static final String TAG = "Description";
 
     private LinedEditText description;
+    private Button addStep;
+    private Button removeStep;
+    int count=0;
     ArrayList<Integer> selectedItems =new ArrayList<>();
 
     @Override
@@ -31,6 +37,8 @@ public class DescriptionUpload extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description_upload);
         description=(LinedEditText) findViewById(R.id.description);
+        addStep=(Button) findViewById(R.id.addStep);
+        removeStep=(Button) findViewById(R.id.removeStep);
 
 
         ImageView backArrow=(ImageView) findViewById(R.id.backArrow);
@@ -41,6 +49,33 @@ public class DescriptionUpload extends AppCompatActivity {
                 Log.d(TAG,"Closing gallery event");
                 Intent intent=new Intent(DescriptionUpload.this,IngredientsUploadActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        addStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                count+=1;
+               String descriptionText=description.getText().toString();
+                if(descriptionText.equals(""))
+                     description.setText("Step"+count+": ");
+                else
+                    description.setText(descriptionText+"\nStep"+(count)+": ");
+            }
+        });
+
+        removeStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               String descriptionText=description.getText().toString();
+
+                if(!descriptionText.equals("")) {
+                    int indexOf = descriptionText.indexOf("Step" + (count) + ":");
+                    descriptionText = descriptionText.substring(0, indexOf);
+                    count-=1;
+                    description.setText(descriptionText);
+
+                }
             }
         });
 
@@ -55,7 +90,7 @@ public class DescriptionUpload extends AppCompatActivity {
                     Toast.makeText(DescriptionUpload.this,"Description is mandatory.",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Intent intent = new Intent(DescriptionUpload.this, RecipeDetails.class);
+                    Intent intent = new Intent(DescriptionUpload.this, RecipeUpload.class);
                     Intent intentOld = getIntent();
                     if (intentOld.hasExtra(getString(R.string.selected_image))) {
                         String imgUrl;
@@ -72,13 +107,37 @@ public class DescriptionUpload extends AppCompatActivity {
                     intent.putExtra("Time Duration", intentOld.getStringExtra("Time Duration"));
                     intent.putExtra("Servings", intentOld.getStringExtra("Servings"));
                     intent.putExtra("Ingredients", intentOld.getStringExtra("Ingredients"));
-                    intent.putExtra("Description", description.getText().toString());
+
+
+                    Gson gson = new Gson();
+                    Log.d(TAG, "onClick: descriptionis: "+description.getText().toString());
+                    String s="Step1: do one\nStep2: then two\nStep3: and then three";
+                    int linecount=description.getLineCount();
+                    int indexOf=description.getText().toString().lastIndexOf("Step");
+                    char y=(description.getText().toString().charAt(indexOf+4));
+                    int length=Integer.parseInt(y+"");
+                    ArrayList<Steps> stepsList=new ArrayList<>();
+                    String descriptionArray[]=description.getText().toString().split("\n");
+                    for(int i=0;i<length;i++)
+                    {
+                        String eachStep[]=descriptionArray[i].split(":");
+                        String stepNo=eachStep[0].substring(4);
+                        Log.d(TAG, "onClick: step number="+stepNo);
+                        Steps sep=new Steps(eachStep[1],stepNo);
+                        sep.setStep(eachStep[1]);
+                        sep.setStep_number(stepNo);
+                        stepsList.add(sep);
+
+                    }
+                    String jsonDescription  = gson.toJson(stepsList);
+                    intent.putExtra("Description", jsonDescription);
                     intent.putExtra("dataFrom","Upload");
                     startActivity(intent);
-                    formatDataAsJSON();
+                 //  formatDataAsJSON();
                 }
             }
         });
+
     }
     private String formatDataAsJSON()
     {

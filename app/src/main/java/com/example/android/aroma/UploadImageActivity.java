@@ -71,8 +71,9 @@ public class UploadImageActivity extends AppCompatActivity {
                         selectedImage="selected_image";
                         intent.putExtra(selectedImage,imgUrl);
 
-                    } else if (intentOld.hasExtra(getString(R.string.selected_bitmap))) {
-                        bitmap = intentOld.getParcelableExtra(getString(R.string.selected_bitmap));
+                    } else if (intentOld.hasExtra(getString(R.string.selected_bitmap)))
+                    {
+                        bitmap = intentOld.getParcelableExtra("selected_bitmap");
                         selectedImage="selected_bitmap";
                         intent.putExtra(selectedImage,bitmap);
                     }

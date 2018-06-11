@@ -2,11 +2,13 @@ package com.example.android.aroma.Model;
 
 public class IngredientModel{
 
+    private  String id;
+
     private String name;
 
-    private String quantity;
+    private String amount;
 
-    private String measure;
+    private String unit;
 
     public String getName() {
         return name;
@@ -17,27 +19,35 @@ public class IngredientModel{
     }
 
     public String getQuantity() {
-        return quantity;
+        return amount;
     }
 
     public void setQuantity(String quantity) {
-        this.quantity = quantity;
+        this.amount = quantity;
     }
 
     public String getMeasure() {
-        return measure;
+        return unit;
     }
 
     public void setMeasure(String measure) {
-        this.measure = measure;
+        this.unit = measure;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "IngredientModel{" +
                 "name='" + name + '\'' +
-                ", quantity='" + quantity + '\'' +
-                ", measure='" + measure + '\'' +
+                ", quantity='" + amount + '\'' +
+                ", measure='" + unit + '\'' +
                 '}';
     }
 }
