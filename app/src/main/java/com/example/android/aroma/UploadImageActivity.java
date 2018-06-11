@@ -48,7 +48,7 @@ public class UploadImageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
                 Intent oldIntent=getIntent();
-                Intent intent=new Intent(UploadImageActivity.this,UploadImageActivity.class);
+                Intent intent=new Intent(UploadImageActivity.this,Home.class);
                 intent.putExtra("user",oldIntent.getSerializableExtra("user"));
                 startActivity(intent);
             }

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
 
+
         mainLayout = (RelativeLayout)findViewById(R.id.mainLayout);
         relay1 = (RelativeLayout)findViewById(R.id.rellay1);
 //      relay2 = (RelativeLayout)findViewById(R.id.rellay2);
@@ -118,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     UserModel u=new UserModel();
                     u.setUserId("imsam.rod@gmail.com");
                     u.setPassword("123456");
-                    Toast.makeText(getApplicationContext(), "get Registered Successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(MainActivity.this,CategoryAndTime.class);
+                    Toast.makeText(getApplicationContext(), "Login Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(MainActivity.this,Home.class);
                     intent.putExtra("UserId",u);
                     startActivity(intent);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

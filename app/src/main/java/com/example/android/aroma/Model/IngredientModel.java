@@ -50,4 +50,7 @@ public class IngredientModel{
                 ", measure='" + unit + '\'' +
                 '}';
     }
+
+    public IngredientModel() {
+    }
 }

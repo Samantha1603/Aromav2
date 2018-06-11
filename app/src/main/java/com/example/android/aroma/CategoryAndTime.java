@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class CategoryAndTime extends AppCompatActivity {
 
@@ -47,7 +49,6 @@ public class CategoryAndTime extends AppCompatActivity {
         selectedICategories=(TextView) findViewById(R.id.selectedCategories);
         categoryList=CreateCategoryHashMap.createCategoryList();
         categoryHashMAp=CreateCategoryHashMap.createCategoryHashMapList();
-
         checkedItems=new boolean[categoryList.length];
 
         timeDuration=(EditText) findViewById(R.id.timeDuration);
@@ -159,14 +160,17 @@ public class CategoryAndTime extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item="";
-                        for(int k=0;k<selectedItems.size();k++)
-                        {
-                            item=item+ categoryList[selectedItems.get(k)];
-                            if(k!=(selectedItems.size()-1))
-                            {
-                                item=item+",";
-                            }
+                        Log.d(TAG, "onClick: +"+selectedItems.size());
+                        Iterator it = selectedItems.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry)it.next();
+                            Log.d(TAG, "onClick: +"+pair.getKey().toString());
+                            Log.d(TAG, "onClick: "+categoryList[Integer.parseInt(pair.getValue().toString())]);
+                            item=item+ categoryList[Integer.parseInt(pair.getValue().toString())];
+                            item=item+",";
                         }
+                        item=item.substring(0,item.length()-1);
+
                         selectedICategories.setText(item);
                     }
                 });

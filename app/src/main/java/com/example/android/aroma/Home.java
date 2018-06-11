@@ -26,7 +26,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Interface.ItemClickListener;
 import com.example.android.aroma.ViewHolder.MenuAdapter;
 import com.example.android.aroma.ViewHolder.MenuViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -49,7 +48,7 @@ public class Home extends AppCompatActivity
     TextView textFullName;
     RecyclerView recyclerMenu;
     RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<Category,MenuViewHolder> adapter;
+ //   FirebaseRecyclerAdapter<Category,MenuViewHolder> adapter;
 
 
     @Override
@@ -150,33 +149,33 @@ public class Home extends AppCompatActivity
         mQueue.add(request);
     }
 
-    private void loadMenu() {
-         adapter =  new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
-            @Override
-            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
-                viewHolder.textMenuName.setText(model.getName());
-                Picasso.with(getBaseContext()).load(model.getImage())
-                        .into(viewHolder.imageView);
-                final Category clickItem = model;
-                viewHolder.setItemClickListener(new ItemClickListener(){
-                    public void onClick(View view, int position, boolean isLongClick){
-                        //Toast.makeText(Home.this,""+clickItem.getName(), Toast.LENGTH_SHORT).show();
-                        //Get category ID and send to new activity
-                        Intent foodList = new Intent(Home.this,FoodList.class);
-                        //CategoryID is key, so get key of the menu
-
-                        System.out.println("key is" + adapter.getRef(position).getKey());
-
-                        foodList.putExtra("CategoryID",adapter.getRef(position).getKey());
-                        startActivity(foodList);
-
-                    }
-                });
-
-            }
-        };
-        recyclerMenu.setAdapter(adapter);
-    }
+//    private void loadMenu() {
+//         adapter =  new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
+//            @Override
+//            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
+//                viewHolder.textMenuName.setText(model.getName());
+//                Picasso.with(getBaseContext()).load(model.getImage())
+//                        .into(viewHolder.imageView);
+//                final Category clickItem = model;
+//                viewHolder.setItemClickListener(new ItemClickListener(){
+//                    public void onClick(View view, int position, boolean isLongClick){
+//                        //Toast.makeText(Home.this,""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+//                        //Get category ID and send to new activity
+//                        Intent foodList = new Intent(Home.this,FoodList.class);
+//                        //CategoryID is key, so get key of the menu
+//
+//                        System.out.println("key is" + adapter.getRef(position).getKey());
+//
+//                        foodList.putExtra("CategoryID",adapter.getRef(position).getKey());
+//                        startActivity(foodList);
+//
+//                    }
+//                });
+//
+//            }
+//        };
+//        recyclerMenu.setAdapter(adapter);
+//    }
 
 
     @Override

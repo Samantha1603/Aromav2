@@ -1,31 +1,39 @@
 {
   "project_info": {
-    "project_number": "267117835555",
-    "firebase_url": "https://aroma-82dec.firebaseio.com",
-    "project_id": "aroma-82dec",
-    "storage_bucket": "aroma-82dec.appspot.com"
+    "project_number": "974327516823",
+    "firebase_url": "https://recipeapp-8f33f.firebaseio.com",
+    "project_id": "recipeapp-8f33f",
+    "storage_bucket": "recipeapp-8f33f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:267117835555:android:f803ffbb74b155c2",
+        "mobilesdk_app_id": "1:974327516823:android:f803ffbb74b155c2",
         "android_client_info": {
           "package_name": "com.example.android.aroma"
         }
       },
       "oauth_client": [
         {
-          "client_id": "267117835555-djrlnp2hqmk3hkn7rcbstc9c0ecf2345.apps.googleusercontent.com",
+          "client_id": "974327516823-re2u483numd8ve77d8leh49h0d0cmfom.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.aroma",
+            "certificate_hash": "61526d38e00405c31921872e313c87cd1fdfc342"
+          }
+        },
+        {
+          "client_id": "974327516823-hof2ac12f8gahf3lchftf4o2t68sbhi4.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "267117835555-djrlnp2hqmk3hkn7rcbstc9c0ecf2345.apps.googleusercontent.com",
+          "client_id": "974327516823-hof2ac12f8gahf3lchftf4o2t68sbhi4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCHukbCK-jH8bLSOViRQtLfTqHRnczyJi4"
+          "current_key": "AIzaSyBAmyRFpkYeI1_io0kBXzZJPFoxWGdByc8"
         }
       ],
       "services": {
@@ -33,8 +41,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974327516823-hof2ac12f8gahf3lchftf4o2t68sbhi4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

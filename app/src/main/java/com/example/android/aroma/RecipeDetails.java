@@ -3,6 +3,7 @@ package com.example.android.aroma;
 import android.content.Intent;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.android.aroma.Model.Recipe;
 import com.example.android.aroma.ViewHolder.IngredientAdapter;
 import com.example.android.aroma.ViewHolder.StepsAdapter;
 import com.example.android.aroma.Model.Comment;
@@ -69,8 +71,8 @@ public class RecipeDetails extends AppCompatActivity {
     String recipeID="";
     StepsAdapter stepsAdapter;
     IngredientAdapter ingredientAdapter;
-    //FirebaseDatabase database;
-    //DatabaseReference recipe;
+    FirebaseDatabase database;
+    DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,11 @@ public class RecipeDetails extends AppCompatActivity {
         stepsAdapter = new StepsAdapter(this,R.id.recipe_steps);
         list_ingredients= (ListView)findViewById(R.id.ingredient_listview);
         listView_steps =(ListView)findViewById(R.id.steps_listView);
+
+        database= FirebaseDatabase.getInstance();
+        dbRef=database.getReference("RecipeFB");
+
+
         list_ingredients.setAdapter(ingredientAdapter);
         listView_steps.setAdapter(stepsAdapter);
         btnLike = (FloatingActionButton)findViewById(R.id.btnLike);
@@ -271,10 +278,56 @@ public class RecipeDetails extends AppCompatActivity {
             public void onErrorResponse(VolleyError error)
             {
                 error.printStackTrace();
+                fetchData();
             }
         });
 
        mQueue.add(request);
     }
+
+    private void fetchData()
+    {
+        Intent oI=getIntent();
+        dbRef.child(oI.getStringExtra("name")).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Recipe r=dataSnapshot.getValue(Recipe.class);
+                Food f=new Food(r.getTitle(),r.getFilePath(),"0");
+                title = r.getTitle();
+                food_name.setText(r.getTitle());
+                food_time.setText(r.getReadyInMinutes());
+                food_servings.setText(r.getServings());
+
+                String imagePath= r.getFilePath();
+                if(!imagePath.equals("") && !(r.getFilePath()==null))
+                    Picasso.with(getBaseContext()).load(imagePath).into(food_image);
+                String ingName, ingQuantity, ingUnit, step,step_number;
+                //String image = categories.getString("https://en.wikipedia.org/wiki/Food");
+                for (int j =0;j<r.getIngredients().size();j++) {
+                    ingName=r.getIngredients().get(j).getName();
+                    ingList.add(ingName);
+                    ingQuantity=r.getIngredients().get(j).getQuantity();
+                    ingUnit=r.getIngredients().get(j).getMeasure();
+                    Ingredients ingredientsList= new Ingredients(ingName,ingQuantity,ingUnit);
+                    ingredientAdapter.add(ingredientsList);
+
+                }
+                for (int j =0;j<r.getInstructions().size();j++) {
+                    Steps s=r.getInstructions().get(j);
+                    step_number =s.getStep_number();
+                    //ArrayList<String>
+                    Steps stepsList= new Steps(s.getStep(),step_number);
+                    stpList.add(s.getStep());
+                    stepsAdapter.add(stepsList);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 }

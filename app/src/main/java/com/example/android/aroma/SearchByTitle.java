@@ -2,6 +2,7 @@ package com.example.android.aroma;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,10 +20,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Interface.ItemClickListener;
+import com.example.android.aroma.Model.Recipe;
 import com.example.android.aroma.ViewHolder.FoodListAdapter;
 import com.example.android.aroma.ViewHolder.FoodViewHolder;
 import com.example.android.aroma.ViewHolder.MenuViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,23 +41,24 @@ import java.util.List;
 
 public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.OnItemClickListener{
 
+
     public static final String Search_ID = "id";
     private ArrayList<Food> foodList;
-    FoodListAdapter foodListAdapter;
+    private FoodListAdapter foodListAdapter;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
-    //DatabaseReference foodList;
+    DatabaseReference dbRef;
     String categoryID = "";
     private RequestQueue mQueue;
     TextView textFullName;
    // RecyclerView recyclerMenu;
 
-    FirebaseRecyclerAdapter<Food,FoodViewHolder> adapter;
+//    FirebaseRecyclerAdapter<Food,FoodViewHolder> adapter;
 
     //Search Functionality
-    FirebaseRecyclerAdapter<Food,FoodViewHolder> searchAdapter;
+  //  FirebaseRecyclerAdapter<Food,FoodViewHolder> searchAdapter;
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
 
@@ -65,6 +67,8 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_search_title);
+        database=FirebaseDatabase.getInstance();
+        dbRef=database.getReference("RecipeFB");
         mQueue = Volley.newRequestQueue(this);
         foodList = new ArrayList<>();
         recyclerView=(RecyclerView)findViewById(R.id.recycler_food_search);
@@ -116,8 +120,8 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
             public void onSearchStateChanged(boolean enabled) {
                 //When search bar is closed
                 //Restore original suggest adapter
-                if(!enabled)
-                    recyclerView.setAdapter(adapter);
+//                if(!enabled)
+//                    recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -191,7 +195,9 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
                                 //String image = categories.getString("https://en.wikipedia.org/wiki/Food");
                                 foodList.add(new Food(name,image,id));
 
+
                             }
+                            getFromFireBase();
                             foodListAdapter = new FoodListAdapter(SearchByTitle.this, foodList);
                             recyclerView.setAdapter(foodListAdapter);
                             foodListAdapter.setOnItemClickListener(SearchByTitle.this);
@@ -210,6 +216,28 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
         });
 
         mQueue.add(request);
+    }
+
+    private void getFromFireBase()
+    {
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren())
+                {
+                    Recipe r=ds.getValue(Recipe.class);
+                    Food f=new Food(r.getTitle(),r.getFilePath(),"0");
+                    foodList.add(f);
+                }
+                foodListAdapter.notifyDataSetChanged();
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /*
@@ -266,7 +294,7 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
         detailIntent.putExtra(Search_ID, clickedItem.getId());
         //detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getCreator());
         //detailIntent.putExtra(EXTRA_LIKES, clickedItem.getLikeCount());
-
+        detailIntent.putExtra("name",clickedItem.getName());
         Intent oldIntent=getIntent();
         detailIntent.putExtra("user",oldIntent.getSerializableExtra("user"));
 
