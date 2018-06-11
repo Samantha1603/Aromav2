@@ -36,7 +36,7 @@ public class CategoryAndTime extends AppCompatActivity {
     boolean[] checkedItems;
     String[] categoryList;
     HashMap<String,Integer> categoryHashMAp=new HashMap<>();
-    ArrayList<Integer> selectedItems =new ArrayList<>();
+    HashMap<Integer,Integer> selectedItems =new HashMap<>();
 
 
     @Override
@@ -59,6 +59,9 @@ public class CategoryAndTime extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
                 Intent intent=new Intent(CategoryAndTime.this,UploadImageActivity.class);
+                Intent oldIntent=getIntent();
+                intent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
                 startActivity(intent);
             }
         });
@@ -110,6 +113,9 @@ public class CategoryAndTime extends AppCompatActivity {
                     intent.putExtra("Category", jsonCategory);
                     intent.putExtra("Time Duration", timeDuration.getText().toString());
                     intent.putExtra("Servings", serves.getText().toString());
+                    Intent oldIntent=getIntent();
+                    intent.putExtra("user",intentOld.getSerializableExtra("user"));
+
                     startActivity(intent);
                 }
             }
@@ -133,8 +139,8 @@ public class CategoryAndTime extends AppCompatActivity {
                                     ((AlertDialog) dialogInterface).getListView().setItemChecked(i, false);
                                 }
                                 else {
-                                    if (!selectedItems.contains(i)) {
-                                        selectedItems.add(i);
+                                    if (!selectedItems.containsKey(i)) {
+                                        selectedItems.put(i,i);
                                     } else {
                                         selectedItems.remove(i);
                                     }

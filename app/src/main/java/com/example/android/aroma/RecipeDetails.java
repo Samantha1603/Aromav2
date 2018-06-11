@@ -139,6 +139,9 @@ public class RecipeDetails extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(RecipeDetails.this, CommentLayout.class);
                 intent.putExtra("recipeId",recipeID);
+                Intent oldIntent=getIntent();
+                intent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
                 startActivity(intent);
             }
         });

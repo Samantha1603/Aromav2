@@ -29,6 +29,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Model.IngredientModel;
@@ -112,10 +113,13 @@ public class RecipeUpload extends AppCompatActivity {
                             imgUrl = intent.getStringExtra(getString(R.string.selected_image));
                             String mAppend = "file://"+imgUrl;
                             Picasso.with(getBaseContext()).load(mAppend).into(food_image);
+                           // String encodedImage=Image
+
 
                         } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                             Bitmap bitmap;
                             bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                            Log.d(TAG, "got new bitmap");
 
                         }
                         sendJSONParse(recipeID);
@@ -220,10 +224,8 @@ public class RecipeUpload extends AppCompatActivity {
             } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                 Bitmap bitmap;
                 bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-
-                String fileLoc=saveImage(bitmap);
-
-                Picasso.with(getBaseContext()).load(fileLoc).into(food_image);
+                Log.d(TAG, "got new bitmap");
+                food_image.setImageBitmap(bitmap);
 
                 //   Picasso.with(getBaseContext()).load(bitmap).into(food_image);
             }

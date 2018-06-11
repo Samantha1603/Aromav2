@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.android.aroma.Model.Comment;
 
+import com.example.android.aroma.Model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import  com.google.firebase.auth.*;
@@ -75,55 +76,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void userLogin() {
-        String password = editTextPassword.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
+//        String password = editTextPassword.getText().toString().trim();
+//        String email = editTextEmail.getText().toString().trim();
+//
+//        if (email.isEmpty()) {
+//            editTextEmail.setError("Email is required");
+//            editTextEmail.requestFocus();
+//            return;
+//        }
+//
+//        if (password.isEmpty()) {
+//            editTextPassword.setError("Password is required");
+//            editTextPassword.requestFocus();
+//            return;
+//        }
+//
+//
+//        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//            editTextEmail.setError("Please enter a valid email");
+//            editTextEmail.requestFocus();
+//            return;
+//
+//        }
+//
+//
+//
+//        if (password.length() < 6) {
+//            editTextPassword.setError("Minimum Length of Passwords should be 6");
+//            editTextPassword.requestFocus();
+//            return;
+//        }
 
-        if (email.isEmpty()) {
-            editTextEmail.setError("Email is required");
-            editTextEmail.requestFocus();
-            return;
-        }
-
-        if (password.isEmpty()) {
-            editTextPassword.setError("Password is required");
-            editTextPassword.requestFocus();
-            return;
-        }
+//        progressbar.setVisibility(View.VISIBLE);
+//        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                progressbar.setVisibility(View.GONE);
+//                if(task.isSuccessful()){
 
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextEmail.setError("Please enter a valid email");
-            editTextEmail.requestFocus();
-            return;
-
-        }
-
-
-
-        if (password.length() < 6) {
-            editTextPassword.setError("Minimum Length of Passwords should be 6");
-            editTextPassword.requestFocus();
-            return;
-        }
-
-        progressbar.setVisibility(View.VISIBLE);
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                progressbar.setVisibility(View.GONE);
-                if(task.isSuccessful()){
-
+                    UserModel u=new UserModel();
+                    u.setUserId("imsam.rod@gmail.com");
+                    u.setPassword("123456");
                     Toast.makeText(getApplicationContext(), "get Registered Successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(MainActivity.this,Home.class);
+                    Intent intent=new Intent(MainActivity.this,CategoryAndTime.class);
+                    intent.putExtra("UserId",u);
                     startActivity(intent);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 
-                }else{
-                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//                }else{
+//                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
     }
 

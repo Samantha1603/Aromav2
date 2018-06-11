@@ -167,6 +167,9 @@ public class SearchByIngredients extends AppCompatActivity implements FoodListAd
         Intent detailIntent = new Intent(this, RecipeDetails.class);
         Food clickedItem = foodList.get(position);
         detailIntent.putExtra(Search_ID, clickedItem.getId());
+        Intent oldIntent=getIntent();
+        detailIntent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
         startActivity(detailIntent);
     }
 

@@ -43,12 +43,12 @@ public class Home extends AppCompatActivity
 
     private ArrayList<Category> menuList;
     MenuAdapter menuAdapter;
-   FirebaseDatabase database;
-   DatabaseReference category;
-   private RequestQueue mQueue;
-   TextView textFullName;
-   RecyclerView recyclerMenu;
-   RecyclerView.LayoutManager layoutManager;
+    FirebaseDatabase database;
+    DatabaseReference category;
+    private RequestQueue mQueue;
+    TextView textFullName;
+    RecyclerView recyclerMenu;
+    RecyclerView.LayoutManager layoutManager;
     FirebaseRecyclerAdapter<Category,MenuViewHolder> adapter;
 
 
@@ -236,6 +236,8 @@ public class Home extends AppCompatActivity
         } else if (id == R.id.nav_liked) {
 
         } else if (id == R.id.nav_subscription) {
+            Intent i=new Intent(this,UploadActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_share) {
 

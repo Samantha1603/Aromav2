@@ -100,6 +100,10 @@ public class SearchPopular extends AppCompatActivity
         Intent detailIntent = new Intent(this, RecipeDetails.class);
         Food clickedItem = foodList.get(position);
         detailIntent.putExtra(EXTRA_ID, clickedItem.getId());
+
+        Intent oldIntent=getIntent();
+        detailIntent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
         startActivity(detailIntent);
     }
 }

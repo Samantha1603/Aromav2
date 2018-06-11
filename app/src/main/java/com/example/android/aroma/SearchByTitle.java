@@ -267,6 +267,9 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
         //detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getCreator());
         //detailIntent.putExtra(EXTRA_LIKES, clickedItem.getLikeCount());
 
+        Intent oldIntent=getIntent();
+        detailIntent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
         startActivity(detailIntent);
     }
 
