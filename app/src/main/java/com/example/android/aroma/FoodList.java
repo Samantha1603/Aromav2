@@ -31,18 +31,62 @@ public class FoodList extends AppCompatActivity
     FoodListAdapter foodListAdapter;
     FirebaseDatabase database;
     DatabaseReference category;
-    private RequestQueue mQueue;
+    private RequestQueue mQueue,iQueue;
     TextView textFullName;
     RecyclerView recyclerMenu;
     RecyclerView.LayoutManager layoutManager;
     String categoryID = "";
+    TextView categoryName;
+    String name1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_list);
         mQueue = Volley.newRequestQueue(this);
+        iQueue = Volley.newRequestQueue(this);
         foodList = new ArrayList<>();
+        if(getIntent()!=null)
+        {
+            categoryID=getIntent().getStringExtra(EXTRA_NAME);
+        }
+        categoryName = (TextView)findViewById(R.id.recipetitle);
+        String base_url ="http://aroma-env.wv5ap2cp4n.us-west-1.elasticbeanstalk.com/categories";
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, base_url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+
+                        try {
+                            JSONObject jobj = response.getJSONObject("data");
+                            JSONArray jsonArray = jobj.getJSONArray("categories");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject cats = jsonArray.getJSONObject(i);
+                                if(cats.getString("id").equals(categoryID)) {
+                                    name1 = cats.getString("name");
+                                    categoryName.setText(name1);
+                                }
+
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                error.printStackTrace();
+            }
+        });
+
+        mQueue.add(request);
+
+
 
         //load menu
         recyclerMenu = (RecyclerView)findViewById(R.id.recycler_food);
@@ -50,10 +94,7 @@ public class FoodList extends AppCompatActivity
         layoutManager = new LinearLayoutManager(this);
         recyclerMenu.setLayoutManager(layoutManager);
 
-        if(getIntent()!=null)
-        {
-            categoryID=getIntent().getStringExtra(EXTRA_NAME);
-        }
+
         if(!categoryID.isEmpty()&& categoryID!=null)
         {
             jsonParse(categoryID);
@@ -104,7 +145,7 @@ public class FoodList extends AppCompatActivity
             }
         });
 
-        mQueue.add(request);
+        iQueue.add(request);
     }
     @Override
     public void onItemClick(int position) {

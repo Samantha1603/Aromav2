@@ -142,8 +142,8 @@ public class RecipeDetails extends AppCompatActivity {
         });
 
 
-        test();
-
+        //test();
+jsonParse(recipeID);
 
 
 

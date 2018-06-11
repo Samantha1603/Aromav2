@@ -10,7 +10,7 @@ public class Steps {
     }
 
 
-    private String step;
+    private String step,step_number;
 
     public String getStep_number() {
         return step_number;
@@ -20,7 +20,7 @@ public class Steps {
         this.step_number = step_number;
     }
 
-    private String step_number;
+
 
     public Steps(String step,String step_number){
         this.setStep(step);

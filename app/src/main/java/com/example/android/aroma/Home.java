@@ -37,6 +37,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MenuAdapter.OnItemClickListener {
     public static final String EXTRA_NAME = "name";
@@ -45,7 +47,8 @@ public class Home extends AppCompatActivity
     MenuAdapter menuAdapter;
    FirebaseDatabase database;
    DatabaseReference category;
-   private RequestQueue mQueue;
+   FancyButton breakfast, maindish, dessert;
+   private RequestQueue mQueue, iQueue;
    TextView textFullName;
    RecyclerView recyclerMenu;
    RecyclerView.LayoutManager layoutManager;
@@ -57,8 +60,57 @@ public class Home extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mQueue = Volley.newRequestQueue(this);
+        iQueue = Volley.newRequestQueue(this);
         menuList = new ArrayList<>();
+        dessert=(FancyButton)findViewById(R.id.dessert);
+        maindish=(FancyButton)findViewById(R.id.maindish);
+        breakfast=(FancyButton)findViewById(R.id.breakfast);
 
+        dessert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent foodlistIntent = new Intent(Home.this, FoodList.class);
+                //Category clickedItem = menuList.get(position);
+                //System.out.println(clickedItem.getId()+clickedItem.getName());
+
+                foodlistIntent.putExtra(EXTRA_NAME, "7");
+                //detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getCreator());
+                //detailIntent.putExtra(EXTRA_LIKES, clickedItem.getLikeCount());
+
+                startActivity(foodlistIntent);
+
+            }
+        });
+        maindish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent foodlistIntent = new Intent(Home.this, FoodList.class);
+                //Category clickedItem = menuList.get(position);
+                //System.out.println(clickedItem.getId()+clickedItem.getName());
+
+                foodlistIntent.putExtra(EXTRA_NAME, "5");
+                //detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getCreator());
+                //detailIntent.putExtra(EXTRA_LIKES, clickedItem.getLikeCount());
+
+                startActivity(foodlistIntent);
+
+            }
+        });
+        breakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent foodlistIntent = new Intent(Home.this, FoodList.class);
+                //Category clickedItem = menuList.get(position);
+                //System.out.println(clickedItem.getId()+clickedItem.getName());
+
+                foodlistIntent.putExtra(EXTRA_NAME, "11");
+                //detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getCreator());
+                //detailIntent.putExtra(EXTRA_LIKES, clickedItem.getLikeCount());
+
+                startActivity(foodlistIntent);
+
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
@@ -67,7 +119,7 @@ public class Home extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         category= database.getReference("Categories");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +128,7 @@ public class Home extends AppCompatActivity
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
