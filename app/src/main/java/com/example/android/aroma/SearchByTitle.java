@@ -51,6 +51,7 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
     FirebaseDatabase database;
     DatabaseReference dbRef;
     String categoryID = "";
+    private String search="";
     private RequestQueue mQueue;
     TextView textFullName;
    // RecyclerView recyclerMenu;
@@ -128,6 +129,7 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
             public void onSearchConfirmed(CharSequence text) {
 
                 //when search finishes
+                search=text.toString();
                 jsonParse(text);
             }
 
@@ -225,10 +227,14 @@ public class SearchByTitle extends AppCompatActivity implements FoodListAdapter.
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds:dataSnapshot.getChildren())
                 {
+
                     Recipe r=ds.getValue(Recipe.class);
-                    Food f=new Food(r.getTitle(),r.getFilePath(),"0");
-                    foodList.add(f);
+                    if(r.getTitle().contains(search))
+                    {    Food f=new Food(r.getTitle(),r.getFilePath(),"0");
+                        foodList.add(f);
+                    }
                 }
+
                 foodListAdapter.notifyDataSetChanged();
             }
 

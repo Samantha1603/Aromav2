@@ -84,10 +84,10 @@ public class DescriptionUpload extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
-                if(description.getText().toString().trim().length()<=0 || description.getText()==null)
+                if(description.getText().toString().trim().length()<=0 || description.getText()==null || !description.getText().toString().startsWith("Step1"))
                 {
                     Log.d(TAG,"next screen"+description.getText());
-                    Toast.makeText(DescriptionUpload.this,"Description is mandatory.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DescriptionUpload.this,"Description is mandatory and must start with Step1:",Toast.LENGTH_LONG).show();
                 }
                 else {
                     Intent intent = new Intent(DescriptionUpload.this, RecipeUpload.class);

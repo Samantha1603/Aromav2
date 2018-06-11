@@ -47,6 +47,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
 
 
     private Button addIngredients;
+    public boolean flag=false;
     //private TextView selectedIngredients;
     private ListView listView;
     private RequestQueue mQueue;
@@ -87,8 +88,9 @@ public class IngredientsUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: add ingredients WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-                AlertDialog.Builder builder = new AlertDialog.Builder(IngredientsUploadActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(IngredientsUploadActivity.this);
                 builder.setTitle(inputEditText.getText().toString());
+
                 // Get the layout inflater
                  LayoutInflater inflater = IngredientsUploadActivity.this.getLayoutInflater();
                                         final View dialogView = inflater.inflate(R.layout.ingredient_search, null);
@@ -105,22 +107,30 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                                                         EditText val = (EditText) dialogView.findViewById(R.id.enterQuantity);
                                                         EditText measure = (EditText) dialogView.findViewById(R.id.enterMeasure);
                                                         //   TextView title=(TextView) dialogView.findViewById(R.id.ingredientName);
-
                                                         IngredientModel ingredientItem = new IngredientModel();
                                                         ingredientItem.setName(inputEditText.getText().toString());
                                                         ingredientItem.setQuantity(val.getText().toString());
                                                         ingredientItem.setMeasure(measure.getText().toString());
-                                                        ingredientItem.setId(ingredientHashMap.get(inputEditText.getText().toString()));
-                                                        ingredientList.add(ingredientItem);
+                                                        if(!ingredientItem.getQuantity().equals("")&&!ingredientItem.getMeasure().equals(""))
+                                                        {
+                                                            ingredientItem.setId(ingredientHashMap.get(inputEditText.getText().toString()));
+                                                            ingredientList.add(ingredientItem);
 
-                                                        listView=(ListView) findViewById(R.id.ingredient_listview);
 
-                                                        IngredientsCustomAdapter adapter=new IngredientsCustomAdapter(IngredientsUploadActivity.this,R.layout.activity_ingredients_upload,ingredientList);
+                                                            Log.d("LIST VIEW", "List view added successfully");
+                                                        }
+                                                        else
+                                                        {
+                                                            Toast.makeText(IngredientsUploadActivity.this,"All fields are mandatory",Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                        listView = (ListView) findViewById(R.id.ingredient_listview);
+
+                                                        IngredientsCustomAdapter adapter = new IngredientsCustomAdapter(IngredientsUploadActivity.this, R.layout.activity_ingredients_upload, ingredientList);
                                                         listView.setAdapter(adapter);
                                                         listView.setScrollContainer(false);
-                                                        addIngredients.setText("");
-                                                        Button cancel=(Button) findViewById(R.id.cancel);
-                                                        Log.d("LIST VIEW","List view added successfully");
+                                                        inputEditText.setText("");
+                                                        Button cancel = (Button) findViewById(R.id.cancel);
 
 
                                                     }
@@ -134,8 +144,6 @@ public class IngredientsUploadActivity extends AppCompatActivity {
                                                 });
                                         AlertDialog alert = builder.create();
                                         alert.show();
-
-
             }
         });
 
@@ -145,7 +153,7 @@ public class IngredientsUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (listView.getAdapter().getCount() == 0) {
+                if (listView==null || listView.getAdapter().getCount() == 0 || listView.getAdapter().isEmpty()) {
 //                /    Log.d(TAG, "next screen" + selectedIngredients.getText());
                     Toast.makeText(IngredientsUploadActivity.this, "Select at least one ingredient", Toast.LENGTH_LONG).show();
                 } else {
