@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class CategoryAndTime extends AppCompatActivity {
 
@@ -36,7 +38,7 @@ public class CategoryAndTime extends AppCompatActivity {
     boolean[] checkedItems;
     String[] categoryList;
     HashMap<String,Integer> categoryHashMAp=new HashMap<>();
-    ArrayList<Integer> selectedItems =new ArrayList<>();
+    HashMap<Integer,Integer> selectedItems =new HashMap<>();
 
 
     @Override
@@ -47,7 +49,6 @@ public class CategoryAndTime extends AppCompatActivity {
         selectedICategories=(TextView) findViewById(R.id.selectedCategories);
         categoryList=CreateCategoryHashMap.createCategoryList();
         categoryHashMAp=CreateCategoryHashMap.createCategoryHashMapList();
-
         checkedItems=new boolean[categoryList.length];
 
         timeDuration=(EditText) findViewById(R.id.timeDuration);
@@ -59,6 +60,9 @@ public class CategoryAndTime extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
                 Intent intent=new Intent(CategoryAndTime.this,UploadImageActivity.class);
+                Intent oldIntent=getIntent();
+                intent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
                 startActivity(intent);
             }
         });
@@ -110,6 +114,9 @@ public class CategoryAndTime extends AppCompatActivity {
                     intent.putExtra("Category", jsonCategory);
                     intent.putExtra("Time Duration", timeDuration.getText().toString());
                     intent.putExtra("Servings", serves.getText().toString());
+                    Intent oldIntent=getIntent();
+                    intent.putExtra("user",intentOld.getSerializableExtra("user"));
+
                     startActivity(intent);
                 }
             }
@@ -133,8 +140,8 @@ public class CategoryAndTime extends AppCompatActivity {
                                     ((AlertDialog) dialogInterface).getListView().setItemChecked(i, false);
                                 }
                                 else {
-                                    if (!selectedItems.contains(i)) {
-                                        selectedItems.add(i);
+                                    if (!selectedItems.containsKey(i)) {
+                                        selectedItems.put(i,i);
                                     } else {
                                         selectedItems.remove(i);
                                     }
@@ -153,14 +160,17 @@ public class CategoryAndTime extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item="";
-                        for(int k=0;k<selectedItems.size();k++)
-                        {
-                            item=item+ categoryList[selectedItems.get(k)];
-                            if(k!=(selectedItems.size()-1))
-                            {
-                                item=item+",";
-                            }
+                        Log.d(TAG, "onClick: +"+selectedItems.size());
+                        Iterator it = selectedItems.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry)it.next();
+                            Log.d(TAG, "onClick: +"+pair.getKey().toString());
+                            Log.d(TAG, "onClick: "+categoryList[Integer.parseInt(pair.getValue().toString())]);
+                            item=item+ categoryList[Integer.parseInt(pair.getValue().toString())];
+                            item=item+",";
                         }
+                        item=item.substring(0,item.length()-1);
+
                         selectedICategories.setText(item);
                     }
                 });

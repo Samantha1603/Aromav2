@@ -127,6 +127,17 @@ public class Home extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         category= database.getReference("Categories");
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(Home.this,UploadActivity.class);
+                startActivity(intent);
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -199,33 +210,33 @@ public class Home extends AppCompatActivity
         mQueue.add(request);
     }
 
-    private void loadMenu() {
-         adapter =  new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
-            @Override
-            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
-                viewHolder.textMenuName.setText(model.getName());
-                Picasso.with(getBaseContext()).load(model.getImage())
-                        .into(viewHolder.imageView);
-                final Category clickItem = model;
-                viewHolder.setItemClickListener(new ItemClickListener(){
-                    public void onClick(View view, int position, boolean isLongClick){
-                        //Toast.makeText(Home.this,""+clickItem.getName(), Toast.LENGTH_SHORT).show();
-                        //Get category ID and send to new activity
-                        Intent foodList = new Intent(Home.this,FoodList.class);
-                        //CategoryID is key, so get key of the menu
-
-                        System.out.println("key is" + adapter.getRef(position).getKey());
-
-                        foodList.putExtra("CategoryID",adapter.getRef(position).getKey());
-                        startActivity(foodList);
-
-                    }
-                });
-
-            }
-        };
-        recyclerMenu.setAdapter(adapter);
-    }
+//    private void loadMenu() {
+//         adapter =  new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
+//            @Override
+//            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
+//                viewHolder.textMenuName.setText(model.getName());
+//                Picasso.with(getBaseContext()).load(model.getImage())
+//                        .into(viewHolder.imageView);
+//                final Category clickItem = model;
+//                viewHolder.setItemClickListener(new ItemClickListener(){
+//                    public void onClick(View view, int position, boolean isLongClick){
+//                        //Toast.makeText(Home.this,""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+//                        //Get category ID and send to new activity
+//                        Intent foodList = new Intent(Home.this,FoodList.class);
+//                        //CategoryID is key, so get key of the menu
+//
+//                        System.out.println("key is" + adapter.getRef(position).getKey());
+//
+//                        foodList.putExtra("CategoryID",adapter.getRef(position).getKey());
+//                        startActivity(foodList);
+//
+//                    }
+//                });
+//
+//            }
+//        };
+//        recyclerMenu.setAdapter(adapter);
+//    }
 
 
     @Override
@@ -288,10 +299,15 @@ public class Home extends AppCompatActivity
             intent.putExtra("id",userid);
             startActivity(intent);
 
+        } else if (id == R.id.nav_subscription) {
+            Intent i=new Intent(this,UploadActivity.class);
+            startActivity(i);
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
 
         }
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

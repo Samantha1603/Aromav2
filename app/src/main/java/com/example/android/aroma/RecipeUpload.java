@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -23,25 +24,32 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Model.IngredientModel;
+import com.example.android.aroma.Model.Recipe;
 import com.example.android.aroma.Utils.FilePaths;
 import com.example.android.aroma.ViewHolder.IngredientAdapter;
 import com.example.android.aroma.ViewHolder.StepsAdapter;
 import com.example.android.aroma.Model.Comment;
 import com.example.android.aroma.Utils.IngredientsCustomAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import static com.example.android.aroma.FoodList.EXTRA_ID;
 
@@ -52,6 +60,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +71,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+
 
 public class RecipeUpload extends AppCompatActivity {
 
@@ -77,11 +88,13 @@ public class RecipeUpload extends AppCompatActivity {
     ArrayList<String> ingList = new ArrayList<>();
     ArrayList<String> stpList = new ArrayList<>();
     String title;
+    FirebaseAuth auth;
     String recipeID="";
     StepsAdapter stepsAdapter;
     IngredientAdapter ingredientAdapter;
     private String token="";
-
+    FirebaseDatabase db;
+    DatabaseReference recipeFb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +107,9 @@ public class RecipeUpload extends AppCompatActivity {
         list_ingredients.setAdapter(ingredientAdapter);
         listView_steps.setAdapter(stepsAdapter);
         upload = (Button)findViewById(R.id.uploadConfirm);
+        auth=FirebaseAuth.getInstance();
+        db= FirebaseDatabase.getInstance();
+        recipeFb=db.getReference("RecipeFB");
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,15 +128,22 @@ public class RecipeUpload extends AppCompatActivity {
                             imgUrl = intent.getStringExtra(getString(R.string.selected_image));
                             String mAppend = "file://"+imgUrl;
                             Picasso.with(getBaseContext()).load(mAppend).into(food_image);
+                           // String encodedImage=Image
+
 
                         } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                             Bitmap bitmap;
                             bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                            Log.d(TAG, "got new bitmap");
 
                         }
-                        sendJSONParse(recipeID);
+                        generateModel();
+                       // sendJSONParse(recipeID);
                         dialog.dismiss();
+                        Toast.makeText(RecipeUpload.this,"Recipe Added",Toast.LENGTH_SHORT).show();
                            // stop chronometer here
+                        Intent i=new Intent(RecipeUpload.this,Home.class);
+                        startActivity(i);
 
                     }
                 });
@@ -162,6 +185,8 @@ public class RecipeUpload extends AppCompatActivity {
 
    //     test();
     }
+
+
 
     private String saveImage(Bitmap bmp)
     {
@@ -220,10 +245,8 @@ public class RecipeUpload extends AppCompatActivity {
             } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                 Bitmap bitmap;
                 bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-
-                String fileLoc=saveImage(bitmap);
-
-                Picasso.with(getBaseContext()).load(fileLoc).into(food_image);
+                Log.d(TAG, "got new bitmap");
+                food_image.setImageBitmap(bitmap);
 
                 //   Picasso.with(getBaseContext()).load(bitmap).into(food_image);
             }
@@ -266,6 +289,166 @@ public class RecipeUpload extends AppCompatActivity {
         }
     }
 
+    private void generateModel() {
+        Recipe r=new Recipe();
+        Intent i = getIntent();
+        try {
+            r.setTitle(i.getStringExtra("Title"));
+            r.setVegetarian("false");
+            r.setVegan("false");
+            r.setDairyFree("false");
+            r.setGlutenFree("false");
+            r.setSourceUrl("");
+            r.setSourceName("");
+            r.setDescription("");
+            r.setReadyInMinutes(i.getStringExtra("Time Duration"));
+            r.setServings(i.getStringExtra("Servings"));
+            List<Category> categories;
+
+            JSONArray categorieArray = new JSONArray(i.getStringExtra("Category"));
+            ArrayList<String> cList=new ArrayList<>();
+            for (int k=0; k < categorieArray.length(); k++) {
+                try {
+                    cList.add(categorieArray.get(k)+"");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            r.setCategories(cList);
+
+
+            JSONArray ingredientArray = new JSONArray(i.getStringExtra("Ingredients"));
+            ArrayList<IngredientModel> iList=new ArrayList<>();
+            for (int k=0; k < ingredientArray.length(); k++) {
+                try {
+                    JSONObject j = ingredientArray.getJSONObject(k);
+                    IngredientModel iModel=new IngredientModel();
+                    iModel.setName(j.getString("name"));
+                    iModel.setQuantity(j.getString("amount"));
+                    iModel.setMeasure(j.getString("unit"));
+                    iModel.setId(j.getString("id"));
+                    iList.add(iModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            r.setIngredients(iList);
+
+            JSONArray stepsArray = new JSONArray(i.getStringExtra("Description"));
+            ArrayList<Steps> stepList=new ArrayList<>();
+            for (int k=0; k < stepsArray.length(); k++) {
+                try {
+                    JSONObject j=stepsArray.getJSONObject(k);
+                    Steps s=new Steps(j.getString("step_number"),j.getString("step"));
+                    stepList.add(s);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            r.setInstructions(stepList);
+
+            if (i.hasExtra(getString(R.string.selected_image))) {
+                String imgUrl;
+                imgUrl = i.getStringExtra(getString(R.string.selected_image));
+                String filePath = "file://"+imgUrl;
+                r.setFilePath(filePath);
+
+            } else if (i.hasExtra(getString(R.string.selected_bitmap))) {
+                Bitmap bitmap;
+                bitmap = i.getParcelableExtra(getString(R.string.selected_bitmap));
+                r.setFilePath("");
+            }
+
+
+//            if (i.hasExtra(getString(R.string.selected_image))) {
+//                String imgUrl;
+//                imgUrl = i.getStringExtra(getString(R.string.selected_image));
+//                String filePath = "file://storage/emulated/0/Pictures/Instagram/IMG_20180525_221446_162.jpg";
+//
+//                j.put("imagebase64", "");
+//
+//
+//            } else if (i.hasExtra(getString(R.string.selected_bitmap))) {
+//                Bitmap bitmap;
+//                bitmap = i.getParcelableExtra(getString(R.string.selected_bitmap));
+//                j.put("imagebase64", "data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4...");
+//            }
+
+            Log.d(TAG,r.toString());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        insertRecipeInDb(r);
+
+    }
+
+
+    private void generateTempModel() {
+        Recipe r=new Recipe();
+        Intent i = getIntent();
+        try {
+            r.setTitle("Cake");
+            r.setVegetarian("false");
+            r.setVegan("false");
+            r.setDairyFree("false");
+            r.setGlutenFree("false");
+            r.setSourceUrl("");
+            r.setSourceName("");
+            r.setDescription("");
+            r.setReadyInMinutes("2");
+            r.setServings("2");
+            List<Category> categories;
+
+           // JSONArray categorieArray = new JSONArray(i.getStringExtra("Category"));
+            ArrayList<String> cList=new ArrayList<>();
+            cList.add("2");
+            r.setCategories(cList);
+
+//            JSONArray ingredientArray = new JSONArray(i.getStringExtra("Ingredients"));
+            ArrayList<IngredientModel> iList=new ArrayList<>();
+            IngredientModel iModel=new IngredientModel();
+            iModel.setName("butter");
+            iModel.setQuantity("2");
+            iModel.setMeasure("grams");
+            iModel.setId("1001");
+            iList.add(iModel);
+            r.setIngredients(iList);
+
+//            JSONArray stepsArray = new JSONArray(i.getStringExtra("Description"));
+            ArrayList<Steps> stepList=new ArrayList<>();
+            Steps s=new Steps("abc","1");
+            Steps s1=new Steps("def","2");
+            Steps s2=new Steps("ghi","3");
+            stepList.add(s);
+            stepList.add(s1);
+            stepList.add(s2);
+            r.setInstructions(stepList);
+            r.setFilePath("");
+            Log.d("TAG",r.toString());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        insertRecipeInDb(r);
+
+    }
+
+    private void insertRecipeInDb(Recipe recipe)
+    {
+        Log.d(TAG, "insertRecipeInDb: HELLLLLLLLO");
+//        recipeFb.setValue("HELLOOOOOO");
+        String id=recipeFb.push().getKey();
+        Log.d(TAG, "insertRecipeInDb: "+id);
+        recipeFb.child(recipe.getTitle()).setValue(recipe);
+        Log.d(TAG, "insertRecipeInDb: Doneeeee");
+    }
 
     private JSONObject generateJSON() {
         Intent i = getIntent();

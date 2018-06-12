@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.aroma.Model.Comment;
+import com.example.android.aroma.Model.UserModel;
 import com.example.android.aroma.Utils.CommentListAdapter;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -74,6 +75,8 @@ public class CommentLayout extends AppCompatActivity {
         mComment=(EditText) findViewById(R.id.comment);
         mListView=(ListView) findViewById(R.id.listViewC);
 
+        Intent oldIntent=getIntent();
+
         mComments=new ArrayList<>();
         mQueue = Volley.newRequestQueue(this);
         aQueue = Volley.newRequestQueue(this);
@@ -82,7 +85,8 @@ public class CommentLayout extends AppCompatActivity {
         c.setComment("as");
         Date d=new Date();
         c.setDate_created(d.toString());
-        c.setUser_id("Sam");
+        UserModel u=(UserModel) oldIntent.getSerializableExtra("user");
+        c.setUser_id(u.getUserId());
 
         //registerUser();
 
@@ -105,6 +109,9 @@ public class CommentLayout extends AppCompatActivity {
                 displayComments();
                 Log.d(TAG, "onClick: comments saved");
                 Intent intent=new Intent(CommentLayout.this,CommentLayout.class);
+                Intent oldIntent=getIntent();
+                intent.putExtra("user",oldIntent.getSerializableExtra("user"));
+
                 startActivity(intent);
             }
         });
@@ -113,6 +120,8 @@ public class CommentLayout extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(CommentLayout.this,RecipeDetails.class);
+                Intent oldIntent=getIntent();
+                intent.putExtra("user",oldIntent.getSerializableExtra("user"));
                 startActivity(intent);
             }
         });

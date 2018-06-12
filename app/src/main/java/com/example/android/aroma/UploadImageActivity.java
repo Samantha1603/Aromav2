@@ -47,7 +47,9 @@ public class UploadImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"Closing gallery event");
-                Intent intent=new Intent(UploadImageActivity.this,UploadImageActivity.class);
+                Intent oldIntent=getIntent();
+                Intent intent=new Intent(UploadImageActivity.this,Home.class);
+                intent.putExtra("user",oldIntent.getSerializableExtra("user"));
                 startActivity(intent);
             }
         });
@@ -66,6 +68,8 @@ public class UploadImageActivity extends AppCompatActivity {
                 {
                     Intent intent=new Intent(UploadImageActivity.this, CategoryAndTime.class);
                     Intent intentOld=getIntent();
+                    intent.putExtra("user",intentOld.getSerializableExtra("user"));
+
                     if (intentOld.hasExtra(getString(R.string.selected_image))) {
                         imgUrl = intentOld.getStringExtra(getString(R.string.selected_image));
                         selectedImage="selected_image";
@@ -78,7 +82,6 @@ public class UploadImageActivity extends AppCompatActivity {
                         intent.putExtra(selectedImage,bitmap);
                     }
                     intent.putExtra("Title",editTitle.getText().toString());
-
 
                     startActivity(intent);
                 }

@@ -45,7 +45,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodvH
 
         holder.mTextViewName.setText(name);
         //holder.mTextViewLikes.setText("Likes: " + likeCount);
-        Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
+        if(!imageUrl.equals(""))
+            Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
     }
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
