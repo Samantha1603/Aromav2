@@ -209,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:id="@+id/addcomments"
-            android:text="Add comments"/>
+            android:text="Comments"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
